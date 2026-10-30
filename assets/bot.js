@@ -182,7 +182,7 @@ q('.mb').onclick=function(){unlock();if(SR)vmSet(!VM.on,true);else{open(true);in
 var sT=0;addEventListener('scroll',function(){if(!MOB())return;w.classList.add('scr');clearTimeout(sT);sT=setTimeout(function(){w.classList.remove('scr')},700)},{passive:true});
 function unlock(){if(unlocked)return;unlocked=true;['pointerdown','keydown','touchstart'].forEach(function(n){removeEventListener(n,unlock,true)});var c=ctx();if(c&&c.state==='suspended')c.resume();if(pend){var t=pend;pend=null;setTimeout(function(){if(!busy&&!rec)say(t)},60)}}
 ['pointerdown','keydown','touchstart'].forEach(function(n){addEventListener(n,unlock,true)});
-var started=false;function start(){if(started)return;started=true;if(!hist.length){greet()}else chips('start');if(!MOB())open(true);else wave()}
+var started=false;function start(){if(started)return;started=true;if(!hist.length){greet()}else chips('start');wave()}
 var pre=document.querySelector('.pre'),seen=document.documentElement.classList.contains('seen');
 if(!pre||seen||RM||getComputedStyle(pre).display==='none'||window.__ddPre)setTimeout(start,window.__ddPre?Math.max(0,window.__ddPre+400-performance.now()):400);
 else{pre.addEventListener('animationend',function(e){if(e.animationName==='pup')setTimeout(start,400)});setTimeout(start,5000)}

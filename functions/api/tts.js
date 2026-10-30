@@ -29,13 +29,27 @@ function phone(m,lang){const d=m.replace(/\D/g,'');if(d.length<10||d.length>13)r
   const sp=x=>x.split('').map(c=>D[c]).join(' ');let cc='';let n=d;if(d.length>10){cc=(lang==='en'?'plus ':'प्लस ')+sp(d.slice(0,d.length-10))+', ';if(lang==='bn')cc=cc.replace('प्लस','প্লাস');n=d.slice(-10)}
   return ' '+cc+sp(n.slice(0,5))+', '+sp(n.slice(5))+', '}
 const AB={en:[[/\bPvt\.?\s*Ltd\.?/gi,'Private Limited'],[/\bPvt\.?/gi,'Private'],[/\bLtd\.?/gi,'Limited'],[/\be\.g\.?/gi,'for example'],[/\bi\.e\.?/gi,'that is'],[/\betc\.?/gi,'etcetera'],[/\bJan\b\.?/g,'January'],[/\bFeb\b\.?/g,'February'],[/\bMar\b\.?/g,'March'],[/\bApr\b\.?/g,'April'],[/\bAug\b\.?/g,'August'],[/\bSept?\b\.?/g,'September'],[/\bOct\b\.?/g,'October'],[/\bNov\b\.?/g,'November'],[/\bDec\b\.?/g,'December'],[/\bvs\.?/gi,'versus'],[/\bapprox\.?/gi,'approximately'],[/\bno\.\s*(?=\d)/gi,'number '],[/\byrs?\b\.?/gi,'years']]};
+const LEX=[[/\bBiesse\b/gi,'Bee-ess-ay'],[/\bEDGETEQ\b/gi,'Edge-tek'],[/\bSpazio\b/gi,'Spaatsio'],[/\bHDHMR\b/g,'H D H M R'],[/\bMDF\b/g,'M D F'],[/\bPUR\b/g,'P U R'],[/\bEVA\b/g,'E V A'],[/\bBOMs\b/g,'B O Ms'],[/\bBOM\b/g,'B O M'],[/\bPPC\b/g,'P P C'],[/\bQC\b/g,'Q C'],[/\bKDT\b/g,'K D T'],[/\bXML\b/g,'X M L'],[/\bWBBSE\b/g,'W B B S E'],[/\bCTC\b/g,'C T C'],
+  [/\bB_?OPTI\b/gi,'B Opti'],[/\bMaxCut\b/g,'Max Cut'],[/\bModGo\b/g,'Mod Go'],[/\bNaadi\b/gi,'Naadi'],[/\bH(?:a|ä)fele\b/gi,'Haefele'],[/\bHettich\b/gi,'Hettikh'],[/\bEbco\b/gi,'Ebco'],[/\bHomag\b/gi,'Hoe-mag'],[/\bSelco\b/gi,'Sel-co'],[/\bAltendorf\b/gi,'Alten-dorf'],[/\bShrichakra\b/gi,'Shree-chakra'],[/\bKutchina\b/gi,'Kutcheena'],
+  [/\bJ-(\d{4})\.in\b/gi,'J $1'],[/\bHi-(\d{3})\b/g,'H I $1'],[/\bOptiSaw\b/gi,'Opti Saw'],[/\bOptiEdge\b/gi,'Opti Edge'],[/\bDhananjay\b/gi,'Dhananjay'],[/\b(\d)D\b/g,'$1 D']];
+const MODELS=[[/\b1232\b/g,'twelve thirty two'],[/\b3200\b/g,'thirty two hundred'],[/\b4550\b/g,'forty five fifty'],[/\b1440\b/g,'fourteen forty'],[/\bSK ?3\b/g,'S K three'],[/\bF ?45\b/g,'F forty five'],[/\bHi-?700\b/gi,'H I seven hundred'],[/\bHi-?202\b/gi,'H I two oh two'],[/\bHi-?320\b/gi,'H I three twenty'],[/\b3\.2\b/g,'three point two']];
 export function normalize(t,lang){
   t=String(t);lang=lang||(/[\u0980-\u09FF]/.test(t)?'bn':/[\u0900-\u097F]/.test(t)?'hi':'en');
   t=t.replace(/\[([^\]]+)\]\([^)]+\)/g,'$1').replace(/<[^>]+>/g,'').replace(/[*#`~>|^]+/g,'').replace(/(^|\s)_+|_+(\s|$)/g,'$1$2');
   t=t.replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{2190}-\u{21FF}\u{2B00}-\u{2BFF}\u{FE0F}\u{200D}\u{1F1E6}-\u{1F1FF}]/gu,'');
+  // pronunciation lexicon (respellings the Edge voices read naturally) before email/url/number handling
+  LEX.forEach(([r,x])=>{t=t.replace(r,x)});if(lang==='en')MODELS.forEach(([r,x])=>{t=t.replace(r,x)});
   t=t.replace(/[\w.+-]+@[\w-]+(\.[\w-]+)+/g,e=>' '+spokenEmailish(e,lang)+' ');
   t=t.replace(/\b(?:https?:\/\/)?(?:www\.)?([a-z0-9-]+(?:\.[a-z0-9-]+)*\.(?:com|in|dev|org|net|io|app|co))(\/[^\s,)]*)?/gi,(m,h,p)=>' '+spokenEmailish(h+(p&&p!=='/'?p.replace(/\/$/,''):''),lang)+' ');
   t=t.replace(/(\+?\d[\d\s-]{8,}\d)/g,m=>phone(m,lang));
+  // human number rules: 10+ / ranges / dimensions / units
+  {const TO={en:' to ',hi:' से ',bn:' থেকে '}[lang],MORE={en:['more than ',''],hi:['',' से ज़्यादा'],bn:['',' এর বেশি']}[lang];
+  t=t.replace(/(\d+)\s*\+(?=\s|$|[,.!?)])/g,(m,n)=>MORE[0]+n+MORE[1]);
+  t=t.replace(/\b(\d+)\s*[x×]\s*(\d+)\s*(?:ft|feet|foot)\b/gi,(m,a,b)=>a+(lang==='en'?' by ':' x ')+b+(lang==='en'?' feet':lang==='hi'?' फ़ीट':' ফুট'));
+  t=t.replace(/\b(\d+)\s*[x×]\s*(\d+)\b/g,(m,a,b)=>a+(lang==='en'?' by ':' x ')+b);
+  t=t.replace(/\b(\d{1,3})\s*[-–]\s*(\d{1,3})\b(?!\s*\d)/g,(m,a,b)=>a+TO+b);
+  const U={en:{mm:'millimetre',cm:'centimetre',ft:'feet',sqft:'square feet',kg:'kilo',hrs:'hours',hr:'hours'},hi:{mm:'मिलीमीटर',cm:'सेंटीमीटर',ft:'फ़ीट',sqft:'स्क्वेयर फ़ीट',kg:'किलो',hrs:'घंटे',hr:'घंटे'},bn:{mm:'মিলিমিটার',cm:'সেন্টিমিটার',ft:'ফুট',sqft:'স্কোয়ার ফুট',kg:'কেজি',hrs:'ঘণ্টা',hr:'ঘণ্টা'}}[lang];
+  t=t.replace(/(\d+(?:\.\d+)?)\s*(mm|cm|ft|kg|hrs?)\b/gi,(m,n,u)=>n+' '+U[u.toLowerCase()]).replace(/(\d+(?:\.\d+)?)\s*(?:sq\.?\s*ft)\b/gi,(m,n)=>n+' '+U.sqft);}
   // year ranges and dash ranges
   t=t.replace(/\b((?:19|20)\d\d)\s*[-–—]\s*((?:19|20)\d\d|present|now)\b/gi,(m,a,b)=>a+(lang==='en'?' to ':lang==='hi'?' से ':' থেকে ')+b);
   t=t.replace(/\s[-–—]\s/g,', ').replace(/[–—]/g,', ');
@@ -59,7 +73,7 @@ export function normalize(t,lang){
 }
 
 const HING=/\b(kya|hai|hain|ka|ki|ke|ko|se|mein|main|mera|meri|mere|aur|nahi|kaise|kitna|unka|unke|woh|wo|yeh|ye|saal|karta|karte|kar|tha|thi|hoon|hun|aap|apna|sab|bhi|toh|par|liye|chahenge|ami|amar|amake|tumi|apni|apnar|ache|achhe|kore|kori|korte|bochor|ebong|kintu|theke|ar|er|e|te|ke|nije|jonno|niye|ki|na|hobe)\b/i;
-const TECH=new Set('rs inr ctc expectation accommodation month cnc bom ppc qc cv ai 2d 3d xml pur biesse homag jai hunny impex kdt altendorf spazio autocad naadi maxcut excel google sheets chatgpt whatsapp email production manager machine machines software team planning quality control dispatch installation design experience modular furniture factory cut list cutting operator edge banding boring panel saw program programs training interview role roles salary availability contact page details site portfolio operator manufacturing hands-on handle'.split(' '));
+const TECH=new Set('rover gold optimus edgeteq selco jade akron optisaw optiedge mdf hdhmr eva hettich hafele blum ebco rs inr ctc expectation accommodation month cnc bom ppc qc cv ai 2d 3d xml pur biesse homag jai hunny impex kdt altendorf spazio autocad naadi maxcut excel google sheets chatgpt whatsapp email production manager machine machines software team planning quality control dispatch installation design experience modular furniture factory cut list cutting operator edge banding boring panel saw program programs training interview role roles salary availability contact page details site portfolio operator manufacturing hands-on handle'.split(' '));
 export function detect(t,hint){if(/[\u0980-\u09FF]/.test(t))return 'bn';if(/[\u0900-\u097F]/.test(t))return 'hi';if((hint==='hi'||hint==='bn')&&HING.test(t))return hint+'-rom';return 'en'}
 // free Google Input Tools transliteration (Roman -> native script), no key
 async function tl1(t,lang){const seg=t.split(/([^A-Za-z']+)/);if(seg.length>1)return (await Promise.all(seg.map(x=>/[A-Za-z]/.test(x)?tl0(x,lang):x))).join('');return tl0(t,lang)}
@@ -77,7 +91,7 @@ const out=(bin,ct,v)=>new Response(bin,{headers:{'content-type':ct,'cache-contro
 const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 const uid=()=>crypto.randomUUID().replace(/-/g,'');
 const ts=()=>new Date().toUTCString().replace('GMT','GMT+0000 (Coordinated Universal Time)');
-async function edgeTTS(text,voice,rate){
+async function edgeTTS(text,voice,rate,fmt){
   const url='https://speech.platform.bing.com/consumer/speech/synthesize/readaloud/edge/v1?TrustedClientToken='+TOKEN+'&ConnectionId='+uid()+'&Sec-MS-GEC='+secMsGec(Date.now()/1000)+'&Sec-MS-GEC-Version=2-143.0.3650.75';
   const r=await fetch(url,{headers:{Upgrade:'websocket',Origin:'chrome-extension://jdiccldimpdaibmpdkjnbmckianbfold','User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0',Pragma:'no-cache','Cache-Control':'no-cache',Cookie:'muid='+uid().toUpperCase()+';'}});
   const ws=r.webSocket;if(!ws)throw new Error('ws '+r.status);ws.accept();
@@ -87,7 +101,7 @@ async function edgeTTS(text,voice,rate){
       if(typeof m==='string'){if(m.includes('Path:turn.end')){clearTimeout(to);res()}}
       else chunks.push((m instanceof ArrayBuffer?Promise.resolve(m):m.arrayBuffer()).then(ab=>{const u=new Uint8Array(ab);const hl=(u[0]<<8)|u[1];const h=new TextDecoder().decode(u.subarray(2,2+hl));return h.includes('Path:audio')?u.subarray(2+hl):new Uint8Array(0)}))});
     ws.addEventListener('close',()=>{clearTimeout(to);chunks.length?res():rej(new Error('closed'))});ws.addEventListener('error',()=>{clearTimeout(to);rej(new Error('wserr'))});});
-  ws.send('X-Timestamp:'+ts()+'\r\nContent-Type:application/json; charset=utf-8\r\nPath:speech.config\r\n\r\n{"context":{"synthesis":{"audio":{"metadataoptions":{"sentenceBoundaryEnabled":"false","wordBoundaryEnabled":"false"},"outputFormat":"audio-24khz-48kbitrate-mono-mp3"}}}}\r\n');
+  ws.send('X-Timestamp:'+ts()+'\r\nContent-Type:application/json; charset=utf-8\r\nPath:speech.config\r\n\r\n{"context":{"synthesis":{"audio":{"metadataoptions":{"sentenceBoundaryEnabled":"false","wordBoundaryEnabled":"false"},"outputFormat":"'+fmt+'"}}}}\r\n');
   const ssml="<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='en-US'><voice name='"+voice+"'><prosody pitch='+0Hz' rate='"+rate+"' volume='+0%'>"+esc(text)+"</prosody></voice></speak>";
   ws.send('X-RequestId:'+uid()+'\r\nContent-Type:application/ssml+xml\r\nX-Timestamp:'+ts()+'Z\r\nPath:ssml\r\n\r\n'+ssml);
   await done;try{ws.close()}catch(e){}
@@ -103,6 +117,7 @@ export async function onRequestPost({request,env}){
   if(lang.endsWith('-rom')){lang=lang.slice(0,2);raw=await translit(raw,lang,env);}
   const text=normalize(raw,lang).slice(0,900);if(!text)return json({error:'empty'},400);
   const voice=VOICE[lang];let err;
-  for(let k=0;k<2;k++){try{return out(await edgeTTS(text,voice,env.TTS_RATE||'+0%'),'audio/mpeg',voice)}catch(e){err=String(e.message||e)}}
+  const rate=(/^[+-]\d{1,2}%$/.test(b.rate||'')?b.rate:null)||env.TTS_RATE||'+0%';
+  for(const fmt of ['audio-24khz-96kbitrate-mono-mp3','audio-24khz-48kbitrate-mono-mp3','audio-24khz-48kbitrate-mono-mp3']){try{return out(await edgeTTS(text,voice,rate,fmt),'audio/mpeg',voice+';'+fmt)}catch(e){err=String(e.message||e)}}
   return json({error:'tts failed',detail:err,fallback:'speechSynthesis'},502);
 }

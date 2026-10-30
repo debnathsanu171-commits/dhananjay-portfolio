@@ -95,7 +95,7 @@ export function create(opts){
       if(mode==='talk'){let n;do{n=TALK[Math.random()*TALK.length|0]}while(n===gest);setPose(n);gT=1.3+Math.random()*1.4;if(n==='dance'||Math.random()<.12)hop=1;}
       else if(mode==='think'){setPose('think');gT=2}
       else if(mode==='listen'){setPose('listen');gT=2}
-      else{const x=Math.random();setPose(x<.12?'hipHand':x<.18?'wave':'idle');gT=x<.18?2.2:3+Math.random()*3}
+      else{const x=Math.random();setPose('idle');gT=3+Math.random()*3}
     }
     shiftT-=dt;if(shiftT<=0){shift=(Math.random()<.5?-1:1)*(mode==='talk'?1:.7);shiftT=2+Math.random()*3}
     tgt.hipX=shift*.025;tgt.hipZ=shift*.035;tgt.kn=[shift<0?.14*Math.abs(shift):0,shift>0?.14*Math.abs(shift):0];

@@ -38,6 +38,7 @@ export function normalize(t,lang){
   t=t.replace(/\[([^\]]+)\]\([^)]+\)/g,'$1').replace(/<[^>]+>/g,'').replace(/[*#`~>|^]+/g,'').replace(/(^|\s)_+|_+(\s|$)/g,'$1$2');
   t=t.replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{2190}-\u{21FF}\u{2B00}-\u{2BFF}\u{FE0F}\u{200D}\u{1F1E6}-\u{1F1FF}]/gu,'');
   // pronunciation lexicon (respellings the Edge voices read naturally) before email/url/number handling
+  t=t.replace(/[\u0966-\u096F]/g,c=>String(c.charCodeAt(0)-0x966)).replace(/[\u09E6-\u09EF]/g,c=>String(c.charCodeAt(0)-0x9E6)).replace(/बीसे|बिएस्से|बिस्से/g,'Biesse').replace(/एज बेंडर|एज बैंडर/g,'edge bander');
   LEX.forEach(([r,x])=>{t=t.replace(r,x)});if(lang==='en')MODELS.forEach(([r,x])=>{t=t.replace(r,x)});
   t=t.replace(/[\w.+-]+@[\w-]+(\.[\w-]+)+/g,e=>' '+spokenEmailish(e,lang)+' ');
   t=t.replace(/\b(?:https?:\/\/)?(?:www\.)?([a-z0-9-]+(?:\.[a-z0-9-]+)*\.(?:com|in|dev|org|net|io|app|co))(\/[^\s,)]*)?/gi,(m,h,p)=>' '+spokenEmailish(h+(p&&p!=='/'?p.replace(/\/$/,''):''),lang)+' ');
@@ -117,7 +118,7 @@ export async function onRequestPost({request,env}){
   if(lang.endsWith('-rom')){lang=lang.slice(0,2);raw=await translit(raw,lang,env);}
   const text=normalize(raw,lang).slice(0,900);if(!text)return json({error:'empty'},400);
   const voice=VOICE[lang];let err;
-  const rate=(/^[+-]\d{1,2}%$/.test(b.rate||'')?b.rate:null)||env.TTS_RATE||'+0%';
+  const rate=(/^[+-]\d{1,2}%$/.test(b.rate||'')?b.rate:null)||env.TTS_RATE||(lang==='hi'?'-5%':'+0%');
   for(const fmt of ['audio-24khz-96kbitrate-mono-mp3','audio-24khz-48kbitrate-mono-mp3','audio-24khz-48kbitrate-mono-mp3']){try{return out(await edgeTTS(text,voice,rate,fmt),'audio/mpeg',voice+';'+fmt)}catch(e){err=String(e.message||e)}}
   return json({error:'tts failed',detail:err,fallback:'speechSynthesis'},502);
 }

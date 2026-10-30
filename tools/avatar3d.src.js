@@ -199,13 +199,13 @@ export function create(opts){
   function render(){r.render(scene,cam)}
   function loop(now){raf=requestAnimationFrame(loop);if(!visible||!host||document.hidden){last=now;return}
     const dt=Math.min(.05,(now-(last||now))/1000);last=now;step(dt);render()}
-  function size(){if(!host)return;const w=host.clientWidth||1,h=host.clientHeight||1;r.setSize(w,h,false);cam.aspect=w/h;
-    const vis=frame,d=(vis/2)/Math.tan(cam.fov*Math.PI/360);cam.position.set(0,1.0,d);cam.lookAt(0,1.0,0);
-    if(w/h>.75){cam.position.y=.95;cam.lookAt(0,.95,0)}cam.updateProjectionMatrix();}
+  function size(){if(!host)return;const cv=r.domElement,hw=host.clientWidth||1,hh=host.clientHeight||1,w=cv.clientWidth||hw,h=cv.clientHeight||hh;r.setSize(w,h,false);cam.aspect=w/h;
+    // keep the figure the same size as in the host box; the canvas is a padded overscan so limbs never clip
+    const vis=frame*(h/hh),bottom=1.0-frame/2,cy=bottom+vis/2,d=(vis/2)/Math.tan(cam.fov*Math.PI/360);cam.position.set(0,cy,d);cam.lookAt(0,cy,0);cam.updateProjectionMatrix();}
   const ro=typeof ResizeObserver!=='undefined'?new ResizeObserver(size):null;
   const api={
     canvas:r.domElement,
-    attach(el,fr){host=el;frame=fr||2.2;el.appendChild(r.domElement);ro&&(ro.disconnect(),ro.observe(el));size();step(0);render()},
+    attach(el,fr){host=el;frame=fr||2.2;el.appendChild(r.domElement);ro&&(ro.disconnect(),ro.observe(el),ro.observe(r.domElement));size();step(0);render()},
     setMode(m){if(m===mode)return;mode=m;gT=0},
     act(n,d){actN=n;actT=d||2;if(n==='hop'){actN='thumbs';hop=1}},
     setTalking(v){A_talk=v},

@@ -126,6 +126,7 @@ const P={
   thumbs:{sx:[-.7,-.7],sz:[.2,-.2],ex:[-1.3,-1.3],brow:.8,hdX:-.08},
   think:{sx:[-.2,-.5],sz:[.25,.15],ex:[-1.6,-2.3],ez:[.3,.4],hdZ:.12,hdX:-.08,hdY:.15,brow:.7},
   listen:{sx:[0,0],sz:[.1,-.1],ex:[-.3,-.3],hdZ:-.15,hdX:.05,brow:.4},
+  pointSide:{sx:[0,-.15],sz:[.1,-1.45],ex:[-.1,-.12],hy:[0,-1.2],hdY:-.4,hdZ:.05,brow:.7,spY:-.12},
   hipHand:{sx:[.1,0],sz:[.55,-.08],ex:[-1.6,-.2],ez:[.9,0],hdZ:-.1,spZ:-.05,brow:.3}
 };
 const TALK=['explain','pointR','shrug','chest','count','explain','dance','thumbs','hipHand','explain','wave'];
@@ -139,14 +140,15 @@ export function create(opts){
   const rim=new DirectionalLight(0x9DB4FF,1.2);rim.position.set(-2,2,-2);scene.add(rim);
   const {root,J}=build(opts.faceImg?faceTex(opts.faceImg):null);scene.add(root);
   const cur=JSON.parse(JSON.stringify(BASE));let tgt=JSON.parse(JSON.stringify(BASE));
-  let mode='idle',gest='idle',gT=0,t=0,blinkT=1.5,blink=0,shiftT=3,shift=0,mouthV=0,hop=0,host=null,frame=.92,raf=0,last=0,visible=true,wavingT=0;
+  let A_talk=false,actN=null,actT=0,walkA=0,mode='idle',gest='idle',gT=0,t=0,blinkT=1.5,blink=0,shiftT=3,shift=0,mouthV=0,hop=0,host=null,frame=.92,raf=0,last=0,visible=true,wavingT=0;
   function setPose(name){gest=name;const p=P[name]||{};tgt=JSON.parse(JSON.stringify(BASE));for(const k in p)tgt[k]=Array.isArray(p[k])?p[k].slice():p[k];}
   function lerp(a,b,f){return a+(b-a)*f}
   function step(dt){
     t+=dt;const f=1-Math.exp(-dt*4.2);
     // gesture scheduler
     gT-=dt;
-    if(wavingT>0){wavingT-=dt;if(gest!=='wave')setPose('wave');if(wavingT<=0)gT=0;}
+    if(actT>0){actT-=dt;if(gest!==actN)setPose(actN);if(actN==='dance'&&Math.random()<dt*1.2)hop=1;if(actT<=0){actN=null;gT=0}}
+    else if(wavingT>0){wavingT-=dt;if(gest!=='wave')setPose('wave');if(wavingT<=0)gT=0;}
     else if(gT<=0){
       if(mode==='talk'){let n;do{n=TALK[Math.random()*TALK.length|0]}while(n===gest);setPose(n);gT=1.3+Math.random()*1.4;if(n==='dance'||Math.random()<.12)hop=1;}
       else if(mode==='think'){setPose('think');gT=2}
@@ -157,12 +159,13 @@ export function create(opts){
     shiftT-=dt;if(shiftT<=0){shift=(Math.random()<.5?-1:1)*(mode==='talk'?1:.7);shiftT=2+Math.random()*3}
     tgt.hipX=shift*.025;tgt.hipZ=shift*.035;tgt.kn=[shift<0?.14*Math.abs(shift):0,shift>0?.14*Math.abs(shift):0];
     for(const key in cur){if(Array.isArray(cur[key]))for(let i=0;i<2;i++)cur[key][i]=lerp(cur[key][i],tgt[key][i],f);else cur[key]=lerp(cur[key],tgt[key],f)}
-    const L=mode==='talk'?Math.min(1,level()):0;mouthV=lerp(mouthV,L,1-Math.exp(-dt*25));
+    walkA=lerp(walkA,mode==='walk'?1:0,1-Math.exp(-dt*6));
+    const L=(mode==='talk'||A_talk)?Math.min(1,level()):0;mouthV=lerp(mouthV,L,1-Math.exp(-dt*25));
     const br=Math.sin(t*1.6),talkAmp=mode==='talk'?1:0;
     // apply
     hop=Math.max(0,hop-dt*2.2);const hopY=Math.sin(hop*Math.PI)*.05;
-    const dance=gest==='dance'?Math.sin(t*9):0;
-    J.hips.position.set(cur.hipX+dance*.03,.95+hopY-Math.abs(dance)*.015+br*.002,0);
+    const dance=gest==='dance'?Math.sin(t*9):0,ws=Math.sin(t*9),wb=Math.abs(Math.cos(t*9));
+    J.hips.position.set(cur.hipX+dance*.03,.95+hopY-Math.abs(dance)*.015+br*.002+walkA*(wb*.025-.015),0);
     J.hips.rotation.set(0,dance*.15,cur.hipZ+dance*.06);
     J.spine.rotation.set(cur.spX+br*.01,cur.spY+Math.sin(t*1.1)*.04*talkAmp,cur.spZ-cur.hipZ*.8-dance*.08);
     J.chest.scale.set(1+br*.008,1+br*.012,1+br*.01);
@@ -173,11 +176,13 @@ export function create(opts){
       if(gest==='dance'){sz+=s*Math.sin(t*9+i*Math.PI)*.25;ex+=Math.sin(t*9)*.3}
       if(gest==='thumbs'||gest==='count'){ex+=Math.sin(t*7)*.12}
       if(gest==='shrug'){J.sh[i].position.y=.47+cur.shUp*(.5+.5*Math.sin(t*5))}else J.sh[i].position.y=lerp(J.sh[i].position.y,.47,f);
+      sx+=walkA*ws*(i?-1:1)*.5;
       J.sh[i].rotation.set(sx,cur.sy[i],sz+s*br*.01);
       J.el[i].rotation.set(ex,0,ez);
       J.ha[i].rotation.set(cur.hx[i],cur.hy[i],cur.hz[i]);
       const kn=cur.kn[i]+(gest==='dance'?Math.max(0,Math.sin(t*9+i*Math.PI))*.35:0);
-      J.hip[i].rotation.set(-kn*.5,0,-cur.hipZ+s*.03);J.kn[i].rotation.set(kn,0,0);J.ft[i].rotation.set(-kn*.5,0,cur.hipZ*.5);
+      const sw=walkA*ws*(i?1:-1)*.5,kb=walkA*Math.max(0,-ws*(i?1:-1))*.7;
+      J.hip[i].rotation.set(-kn*.5+sw-kb*.5,0,-cur.hipZ+s*.03);J.kn[i].rotation.set(kn+kb,0,0);J.ft[i].rotation.set(-kn*.5,0,cur.hipZ*.5);
     }
     J.neck.rotation.set(cur.hdX*.4,cur.hdY*.4,cur.hdZ*.4);
     J.head.rotation.set(cur.hdX+Math.sin(t*.7)*.03+(talkAmp?Math.sin(t*5.3)*.04*mouthV:0),cur.hdY+Math.sin(t*.45)*.08,cur.hdZ+Math.sin(t*.9)*.02+(gest==='dance'?Math.sin(t*9)*.1:0));
@@ -202,6 +207,9 @@ export function create(opts){
     canvas:r.domElement,
     attach(el,fr){host=el;frame=fr||2.2;el.appendChild(r.domElement);ro&&(ro.disconnect(),ro.observe(el));size();step(0);render()},
     setMode(m){if(m===mode)return;mode=m;gT=0},
+    act(n,d){actN=n;actT=d||2;if(n==='hop'){actN='thumbs';hop=1}},
+    setTalking(v){A_talk=v},
+    setDPR(v){r.setPixelRatio(Math.min(v,3));size()},
     wave(){wavingT=2.4},
     hop(){hop=1},
     start(){if(!raf)raf=requestAnimationFrame(loop)},

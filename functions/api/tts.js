@@ -57,9 +57,19 @@ export function normalize(t,lang){
   return t.replace(/\s{2,}/g,' ').replace(/\s+([,.।?!])/g,'$1').replace(/,\s*([,.।?!])/g,'$1').replace(/^[,\s]+/,'').trim();
 }
 const b64=a=>Uint8Array.from(atob(a),c=>c.charCodeAt(0));
-const HING=/\b(kya|hai|hain|ka|ki|ke|ko|se|mein|aur|nahi|kaise|kitna|unka|unke|woh|yeh|saal|karte|kar|tha|thi|hoon|hun|aap|ami|amar|tumi|apni|ache|achhe|kore|korte|bochor|ebong|kintu|theke)\b/i;
+const HING=/\b(kya|hai|hain|ka|ki|ke|ko|se|mein|main|mera|meri|mere|aur|nahi|kaise|kitna|unka|unke|woh|wo|yeh|ye|saal|karta|karte|kar|tha|thi|hoon|hun|aap|apna|sab|bhi|toh|par|liye|chahenge|ami|amar|amake|tumi|apni|apnar|ache|achhe|kore|kori|korte|bochor|ebong|kintu|theke|ar|er|e|te|ke|nije|jonno|niye|ki|na|hobe)\b/i;
+const TECH=new Set('cnc bom ppc qc cv ai 2d 3d xml pur biesse homag jai hunny impex kdt altendorf spazio autocad naadi maxcut excel google sheets chatgpt whatsapp email production manager machine machines software team planning quality control dispatch installation design experience modular furniture factory cut list cutting operator edge banding boring panel saw program programs training interview role roles salary availability contact page details site portfolio operator manufacturing hands-on handle'.split(' '));
 export function detect(t,hint){if(/[\u0980-\u09FF]/.test(t))return 'bn';if(/[\u0900-\u097F]/.test(t))return 'hi';if((hint==='hi'||hint==='bn')&&HING.test(t))return hint+'-rom';return 'en'}
-async function translit(t,lang,env){try{const r=await fetch('https://api.sarvam.ai/transliterate',{method:'POST',headers:{'api-subscription-key':env.SARVAM_API_KEY,'content-type':'application/json'},body:JSON.stringify({input:t,source_language_code:'en-IN',target_language_code:lang+'-IN'})});if(r.ok){const d=await r.json();if(d.transliterated_text)return d.transliterated_text}}catch(e){}return t}
+async function tl1(t,lang,env){try{const r=await fetch('https://api.sarvam.ai/transliterate',{method:'POST',headers:{'api-subscription-key':env.SARVAM_API_KEY,'content-type':'application/json'},body:JSON.stringify({input:t,source_language_code:'en-IN',target_language_code:lang+'-IN'})});if(r.ok){const d=await r.json();if(d.transliterated_text)return d.transliterated_text}}catch(e){}return t}
+// Roman Hinglish/Banglish -> native script, keeping English technical words (and Capitalised names of tools/brands) in Latin
+async function translit(t,lang,env){
+  const parts=t.split(/(\s+)/),runs=[];let cur=null;
+  for(const p of parts){const w=p.replace(/[^A-Za-z0-9-]/g,'').toLowerCase();const keep=!/\S/.test(p)?null:(!/[A-Za-z]/.test(p)||TECH.has(w)||/^[A-Z0-9]{2,}$/.test(p.replace(/[^A-Za-z0-9]/g,'')));
+    if(keep===null){(cur||(cur={k:true,s:'',ws:true})).s+=p;continue}
+    if(!cur||cur.k!==keep||cur.ws&&cur.k!==keep){if(cur&&cur.ws&&!runs.includes(cur)){cur.k=keep;cur.ws=false;cur.s+=p;runs.push(cur);continue}cur={k:keep,s:p};runs.push(cur)}else cur.s+=p}
+  const out=await Promise.all(runs.map(r=>r.k||!/[A-Za-z]/.test(r.s)?r.s:tl1(r.s.trim(),lang,env).then(x=>(r.s.match(/^\s*/)[0])+x+(r.s.match(/\s*$/)[0]))));
+  return out.join('').replace(/\s{2,}/g,' ').trim();
+}
 const out=(bin,ct,v)=>new Response(bin,{headers:{'content-type':ct,'cache-control':'no-store','x-voice':v}});
 export async function onRequestPost({request,env}){
   if(!originOk(request))return json({error:'forbidden'},403);

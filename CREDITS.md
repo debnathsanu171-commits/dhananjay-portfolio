@@ -37,6 +37,7 @@ Work gallery photos and video: own work, Dhananjay Debnath.
 | jai-optisaw.* | Jai Optimus OptiSaw 3.2 | https://www.jaiindustries.com/optisaw.html |
 | jai-j4550.* | Jai auto edge bander (J-4550.in range) | https://www.jaiindustries.com/auto-edge-banders.html |
 | jai-optiedge.* | Jai Optimus OptiEdge | https://www.jaiindustries.com/optiedge-high-speed-auto-edge-bander.html |
+| jai-optimus-multi-boring.* | Jai Optimus multi-boring (OptiDrill range image) | https://www.jaiindustries.com/optimus.html |
 | jai-multi-boring.* | Jai Modula multi boring | https://www.jaiindustries.com/multiborings.html |
 | hunny-hi700.* | Hunny Impex Hi-700 PUR | https://hunnyimpex.in/products/hi-700-pur-auto-edge-bander/ |
 | hunny-hi202.* | Hunny Impex Hi-202 | https://hunnyimpex.in/product-category/multi-boring-machine/ |

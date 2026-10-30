@@ -1,12 +1,12 @@
 # Image credits
 
-Machine photos are representative images from Wikimedia Commons, used under their Creative Commons licences. Images were resized/cropped (4:3) and converted to AVIF/WebP/JPEG.
+The spindle photo is from Wikimedia Commons; other machine photos are manufacturer images (tables below), used under their Creative Commons licences. Images were resized/cropped (4:3) and converted to AVIF/WebP/JPEG.
 
 | Site file | Original | Author | Licence |
 |---|---|---|---|
 | assets/img/mach/spindle.* | [Shaper cubico center2.jpg](https://commons.wikimedia.org/wiki/File:Shaper_cubico_center2.jpg) | Dschamal Berger | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
 
-Company logo: Kutchina logo from the official site https://www.kutchina.com/assets/images/Kutchina-White-Logo.png (trademark of its owner, used only to identify a former employer). Other employers (Timber Tech, Kiran Furniture, Designer Private Limited) are shown as monogram badges (no official logo found).
+Company logo: Kutchina logo from the official site https://www.kutchina.com/assets/images/Kutchina-White-Logo.png (trademark of its owner, used only to identify a former employer). Kiran Furniture and Timber Tech (WoodAura) logos: see table below. Designer Private Limited is shown as a monogram badge (no verifiable official logo found).
 
 Work gallery photos and video: own work, Dhananjay Debnath.
 

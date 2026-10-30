@@ -14,12 +14,8 @@ Work gallery photos and video: own work, Dhananjay Debnath.
 
 | File | Machine | Source |
 |---|---|---|
-| assets/img/mach/biesse-rover.* | Biesse Rover A FT CNC machining centre | Biesse Rover A FT catalogue (PDF), https://teknikagroup.com/wp-content/uploads/2025/02/KATALOGROVERAFT.pdf — © Biesse S.p.A. |
 | assets/img/mach/altendorf-f45.* | Altendorf F 45 sliding table saw | https://www.altendorf.com/en-us/machines/altendorf-f-45/ — © Altendorf |
-| assets/img/mach/jai-beam-saw.* | Jai Optimus Opticut beam saw | https://www.jaiindustries.com/opticut-beam-saw.html — © Jai Industries |
-| assets/img/mach/jai-edge-bander.* | Jai Optimus Optiedge 8.5 high-speed auto edge bander | https://www.jaiindustries.com/optiedge-high-speed-auto-edge-bander.html — © Jai Industries |
 | assets/img/mach/jai-multi-boring.* | Jai Modula multi boring | https://www.jaiindustries.com/multiborings.html — © Jai Industries |
-| assets/img/mach/jai-optibore.* | Jai Optimus Optibore 5-09 five-side CNC boring | https://www.jaiindustries.com/optibore-5-09-five-side-cnc-boring.html — © Jai Industries |
 | assets/img/mach/srichakra-hot-press.* | Srichakra veneer/laminate hot press | https://www.srichakraengineering.com/ (veneer/laminate bonding press) — © Srichakra Engineering Equipments |
 
 ## Company logos (trademarks of their owners, used to identify employers)
@@ -28,3 +24,23 @@ Work gallery photos and video: own work, Dhananjay Debnath.
 |---|---|---|
 | assets/img/logo/kiran.* | Kiran — Kanika Furniture (P) Ltd, Bhubaneswar | https://kanikafurniture.com/images/logo.png |
 | assets/img/logo/woodaura.* | WoodAura, Raipur | LinkedIn company page https://www.linkedin.com/company/woodaura |
+
+## Machine images by manufacturer (© the respective manufacturers, used for illustration)
+
+| File | Model | Source |
+|---|---|---|
+| biesse-rover-gold.* | Biesse Rover Gold 1232 | https://solimacgroup.com/product/BIESSEROVERGOLD/24/38 (Biesse dealer) |
+| biesse-selco-sk3.* | Biesse Selco SK 3 | Biesse catalogue PDF https://teknikagroup.com/wp-content/uploads/2025/02/selcosk3.pdf |
+| biesse-jade-340.* | Biesse Jade 300/340 | Biesse catalogue PDF https://5.imimg.com/data5/SELLER/Doc/2021/1/JM/ZZ/YX/1443623/biesse-jade-340-automatic-single-sided-edge-banding-machine.pdf |
+| biesse-akron-1440.* | Biesse Akron 1400/1440 | Biesse catalogue PDF https://teknikagroup.com/wp-content/uploads/2025/02/AKRON1440-1.pdf |
+| jai-j3200.* | Jai J-3200.in panel saw | https://www.jaiindustries.com/panel-saws.html |
+| jai-optisaw.* | Jai Optimus OptiSaw 3.2 | https://www.jaiindustries.com/optisaw.html |
+| jai-j4550.* | Jai auto edge bander (J-4550.in range) | https://www.jaiindustries.com/auto-edge-banders.html |
+| jai-optiedge.* | Jai Optimus OptiEdge | https://www.jaiindustries.com/optiedge-high-speed-auto-edge-bander.html |
+| jai-multi-boring.* | Jai Modula multi boring | https://www.jaiindustries.com/multiborings.html |
+| hunny-hi700.* | Hunny Impex Hi-700 PUR | https://hunnyimpex.in/products/hi-700-pur-auto-edge-bander/ |
+| hunny-hi202.* | Hunny Impex Hi-202 | https://hunnyimpex.in/product-category/multi-boring-machine/ |
+| hunny-hi320.* | Hunny Impex Hi-320 panel saw | https://hunnyimpex.in/products/hi-320-plus-panel-saw/ |
+| kdt-533.* | KDT multi boring (KDT-533) | https://kdtiberica.com/en/drills/multi-purpose-drills/ |
+| homag-sawteq-s190.* | Homag SAWTEQ S-190 | https://www.homag.com/en/ |
+| homag-edgeteq-s500.* | Homag EDGETEQ S-500 | https://www.homag.com/en/ |

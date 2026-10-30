@@ -123,7 +123,7 @@ function ptLoop(e){clearInterval(MV.pi);MV.pi=setInterval(function(){if(MV.st!==
 function tourEnd(){if(MV.busyTour||isO())return;if(MV.st==='center'||MV.st==='section'){clearTimeout(MV.tm);MV.tm=setTimeout(function(){if(!A.talking&&!A.loading&&!busy&&!rec&&!MV.busyTour)toCorner();else if(MV.st==='center'&&!MV.busyTour)tourEnd()},1400)}}
 function ptFn(e){return function(){var r=e.getBoundingClientRect();return{x:r.left+r.width/2,y:r.top+Math.min(r.height/2,innerHeight*.4)}}}
 function flyTo(e,done){if(RM||isO()){done&&done();return}clearTimeout(MV.tm);MV.busyTour=true;var b=base(),sc=MOB()?.9:1.05;comp.classList.add('fly');comp.classList.remove('big');if(AV&&AV.pointAt)AV.pointAt(null);
-  MV.tm=setTimeout(function(){var r=e.getBoundingClientRect(),top=Math.max(70,Math.min(r.top+40,innerHeight-b.h*sc-20)),right=Math.min(innerWidth-8,r.right+b.w*sc*.9);
+  MV.tm=setTimeout(function(){var r=e.getBoundingClientRect(),mx=document.documentElement.scrollHeight-innerHeight,pt=e.tagName==='FIGURE'?(innerHeight-r.height)/2:Math.max(0,parseFloat(getComputedStyle(e).scrollMarginTop)||0),need=r.top-pt;if(scrollY+need>mx)pt=r.top-(mx-scrollY);if(scrollY+need<0)pt=r.top+scrollY;var top=Math.max(70,Math.min(pt+40,innerHeight-b.h*sc-20)),right=Math.min(innerWidth-8,r.right+b.w*sc*.9);
     var x=MOB()?innerWidth-b.w*sc-6:Math.max(r.left+r.width*.55,Math.min(right-b.w*sc,innerWidth-b.w*sc-20));
     if(AV)AV.setMode('walk');MV.st='section';
     compT(x-b.x,(top+b.h*sc)-(b.y+b.h),sc,true,function(){comp.classList.remove('fly');if(MV.st!=='section')return;if(AV){AV.setMode(A.talking?'talk':'idle');if(AV.pointAt)AV.pointAt(ptFn(e));else AV.act('pointSide',1.8)}

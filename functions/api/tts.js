@@ -73,13 +73,13 @@ export async function onRequestPost({request,env}){
   if(env.USE_CLONE==='1'&&env.SARVAM_VOICE_ID){ // clone path disabled by default
     try{
       const f=new FormData();f.append('text',text);f.append('voice_id',env.SARVAM_VOICE_ID);f.append('language_code',lc);f.append('pace',String(env.TTS_PACE||PACE));
-      f.append('output_audio_codec','mp3');f.append('speech_sample_rate','24000');f.append('enable_text_normalization','true');if(QC)f.append('enable_qc','true');
+      f.append('output_audio_codec','wav');f.append('speech_sample_rate','24000');f.append('enable_text_normalization','true');if(QC)f.append('enable_qc','true');
       const r=await fetch('https://api.sarvam.ai/voices/clone',{method:'POST',headers:{'api-subscription-key':env.SARVAM_API_KEY},body:f});
-      if(r.ok){const d=await r.json();if(d.audio_b64)return out(b64(d.audio_b64),'audio/mpeg','clone');}
+      if(r.ok){const d=await r.json();if(d.audio_b64)return out(b64(d.audio_b64),'audio/wav','clone');}
     }catch(e){}
   }
-  const r=await fetch('https://api.sarvam.ai/text-to-speech',{method:'POST',headers:{'api-subscription-key':env.SARVAM_API_KEY,'content-type':'application/json'},body:JSON.stringify({inputs:[text],target_language_code:lc,model:'bulbul:v3',speaker:env.TTS_SPEAKER||SPEAKER,pace:Number(env.TTS_PACE||PACE),temperature:0.5,speech_sample_rate:24000,output_audio_codec:'mp3'})});
+  const r=await fetch('https://api.sarvam.ai/text-to-speech',{method:'POST',headers:{'api-subscription-key':env.SARVAM_API_KEY,'content-type':'application/json'},body:JSON.stringify({inputs:[text],target_language_code:lc,model:'bulbul:v3',speaker:env.TTS_SPEAKER||SPEAKER,pace:Number(env.TTS_PACE||PACE),temperature:0.5,speech_sample_rate:24000,output_audio_codec:'wav'})});
   if(!r.ok)return json({error:'upstream',status:r.status},502);
   const d=await r.json(); const a=d.audios?.[0]; if(!a)return json({error:'no audio'},502);
-  return out(b64(a),'audio/mpeg',env.TTS_SPEAKER||SPEAKER);
+  return out(b64(a),'audio/wav',env.TTS_SPEAKER||SPEAKER);
 }

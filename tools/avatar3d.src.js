@@ -1,11 +1,39 @@
-import {WebGLRenderer,Scene,PerspectiveCamera,HemisphereLight,DirectionalLight,Group,Mesh,MeshStandardMaterial,SphereGeometry,CapsuleGeometry,BoxGeometry,CylinderGeometry,ConeGeometry,ShapeGeometry,Shape,SRGBColorSpace,DoubleSide} from 'three';
+import {CanvasTexture,MeshBasicMaterial,WebGLRenderer,Scene,PerspectiveCamera,HemisphereLight,DirectionalLight,Group,Mesh,MeshStandardMaterial,SphereGeometry,CapsuleGeometry,BoxGeometry,CylinderGeometry,ConeGeometry,ShapeGeometry,Shape,SRGBColorSpace,DoubleSide} from 'three';
 const M=c=>new MeshStandardMaterial({color:c,roughness:.75,metalness:0,flatShading:true});
-const SKIN=M(0xA8703F),SKIND=M(0x8C5634),HAIR=M(0x14151B),SUIT=M(0x1E2A52),PANT=M(0x18213F),SHIRT=M(0xBFD6F0),SHOE=M(0x0E0E10),WHITE=M(0xF4F1EC),PUP=M(0x23140D),LIP=M(0x6B2E25),MOUTH=M(0x2A0E0B),BELT=M(0x111114);
+const SKIN=M(0xB27A55),SKIND=M(0x8C5634),HAIR=M(0x14151B),SUIT=M(0x1E2A52),PANT=M(0x18213F),SHIRT=M(0xBFD6F0),SHOE=M(0x0E0E10),WHITE=M(0xF4F1EC),PUP=M(0x23140D),LIP=M(0x6B2E25),MOUTH=M(0x2A0E0B),BELT=M(0x111114);
 SHIRT.side=DoubleSide;
 function mk(geo,mat,parent,p=[0,0,0],r=[0,0,0],s=[1,1,1]){const m=new Mesh(geo,mat);m.position.set(...p);m.rotation.set(...r);m.scale.set(...s);parent.add(m);return m}
 function G(parent,p=[0,0,0]){const g=new Group();g.position.set(...p);parent.add(g);return g}
 const cap=(r,l)=>new CapsuleGeometry(r,l,3,8);
-function build(){
+
+const FC={x:128,y:48,w:232,h:362,mouth:[240,338],eyes:[[206,236],[292,236]]};
+function faceTex(img){
+  const S=256,c=document.createElement('canvas');c.width=S;c.height=Math.round(S*FC.h/FC.w);const g=c.getContext('2d'),H=c.height,k=S/FC.w;
+  const base=document.createElement('canvas');base.width=S;base.height=H;const b=base.getContext('2d');
+  b.drawImage(img,FC.x,FC.y,FC.w,FC.h,0,0,S,H);
+  // feather edges
+  b.globalCompositeOperation='destination-in';const gr=b.createRadialGradient(S/2,S/2,S*.44,S/2,S/2,S*.56);gr.addColorStop(0,'#000');gr.addColorStop(1,'rgba(0,0,0,0)');b.save();b.scale(1,H/S);b.fillStyle=gr;b.fillRect(0,0,S,S);b.restore();b.globalCompositeOperation='source-over';
+  const P=(pt)=>[(pt[0]-FC.x)*k,(pt[1]-FC.y)*k];const m=P(FC.mouth),e=FC.eyes.map(P);
+  const lidC=(()=>{const d=b.getImageData(e[0][0]|0,(e[0][1]-9*k)|0,1,1).data;return `rgb(${d[0]},${d[1]},${d[2]})`})();
+  const tex=new CanvasTexture(c);tex.colorSpace=SRGBColorSpace;tex.premultiplyAlpha=true;
+  let lv=-1,lb=-1;
+  function draw(open,blink){open=Math.round(open*20)/20;blink=Math.round(blink*10)/10;if(open===lv&&blink===lb)return;lv=open;lb=blink;
+    g.clearRect(0,0,S,H);g.drawImage(base,0,0);
+    if(open>0.02){const mw=34*k,dy=open*9*k,top=m[1]-1*k;
+      g.save();g.beginPath();g.ellipse(m[0],top+dy*.5,mw*.62,dy*.55+1,0,0,Math.PI*2);g.fillStyle='#2a0f0c';g.fill();g.restore();
+      // shift lower lip + chin down
+      g.save();g.beginPath();g.ellipse(m[0],top+40*k,mw*1.1,40*k,0,0,Math.PI);g.clip();g.drawImage(base,0,top,S,H-top,0,top+dy,S,H-top);g.restore();
+      g.save();g.beginPath();g.ellipse(m[0],top+dy*.45,mw*.55,dy*.5,0,0,Math.PI*2);g.clip();g.fillStyle='#2a0f0c';g.fillRect(0,0,S,H);g.fillStyle='rgba(235,230,225,.85)';g.fillRect(m[0]-mw*.4,top-1,mw*.8,Math.min(3*k,dy*.3));g.restore();}
+    if(blink>0.05){g.save();g.globalAlpha=Math.min(1,blink*1.2);g.fillStyle=lidC;e.forEach(p=>{g.beginPath();g.ellipse(p[0],p[1]-1*k,13*k,7*k*blink+1,0,0,Math.PI*2);g.fill()});g.globalAlpha=1;g.strokeStyle='rgba(40,25,20,.6)';g.lineWidth=1.2;e.forEach(p=>{g.beginPath();g.moveTo(p[0]-12*k,p[1]+5*k*blink-2);g.quadraticCurveTo(p[0],p[1]+7*k*blink,p[0]+12*k,p[1]+5*k*blink-2);g.stroke()});g.restore();}
+    tex.needsUpdate=true}
+  draw(0,0);return {tex,draw,aspect:H/S};
+}
+function faceMesh(head,F){
+  const R=.128,geo=new SphereGeometry(R,40,32,Math.PI/2-1.1,2.2,Math.PI*.12,Math.PI*.8);const pos=geo.attributes.position,uv=geo.attributes.uv;
+  let x0=1,x1=-1,y0=1,y1=-1;for(let i=0;i<pos.count;i++){x0=Math.min(x0,pos.getX(i));x1=Math.max(x1,pos.getX(i));y0=Math.min(y0,pos.getY(i));y1=Math.max(y1,pos.getY(i))}
+  for(let i=0;i<pos.count;i++){uv.setXY(i,(pos.getX(i)-x0)/(x1-x0),(pos.getY(i)-y0)/(y1-y0))}
+  const m=new Mesh(geo,new MeshBasicMaterial({map:F.tex,transparent:true,depthWrite:false,premultipliedAlpha:true}));m.position.set(0,.13,.008);m.scale.set(.96,(.96*F.aspect*(x1-x0)/(y1-y0)),1.0);m.renderOrder=2;head.add(m);return m}
+function build(face){
   const root=new Group(),J={};
   const hips=J.hips=G(root,[0,.95,0]);
   mk(cap(.11,.16),PANT,hips,[0,.03,0],[0,0,Math.PI/2],[1,1,.8]);
@@ -26,12 +54,14 @@ function build(){
   const head=J.head=G(neck,[0,.06,0]);head.scale.setScalar(1.32);
   mk(new SphereGeometry(.118,18,14),SKIN,head,[0,.12,0],[0,0,0],[.95,1.13,1.02]);
   // ears
-  mk(new SphereGeometry(.028,8,6),SKIND,head,[-.112,.12,0],[0,0,0],[.5,1,.8]);mk(new SphereGeometry(.028,8,6),SKIND,head,[.112,.12,0],[0,0,0],[.5,1,.8]);
+  if(!face)mk(new SphereGeometry(.028,8,6),SKIND,head,[-.112,.12,0],[0,0,0],[.5,1,.8]);if(!face)mk(new SphereGeometry(.028,8,6),SKIND,head,[.112,.12,0],[0,0,0],[.5,1,.8]);
+  if(face){J.F=face;faceMesh(head,face);J.lids=[];J.pups=[];J.brows=[];}
   // hair: top cap, back, swept-up quiff
-  mk(new SphereGeometry(.124,18,10,0,Math.PI*2,0,Math.PI*.42),HAIR,head,[0,.135,-.005],[-.15,0,0],[.98,1.15,1.05]);
+  if(!face)mk(new SphereGeometry(.124,18,10,0,Math.PI*2,0,Math.PI*.42),HAIR,head,face?[0,.15,-.02]:[0,.135,-.005],face?[-.45,0,0]:[-.15,0,0],face?[.99,1.12,1.0]:[.98,1.15,1.05]);
   mk(new SphereGeometry(.123,16,10,Math.PI,Math.PI,0,Math.PI*.62),HAIR,head,[0,.125,-.006],[0,0,0],[.98,1.12,1.04]);
-  mk(new SphereGeometry(.09,12,8),HAIR,head,[0,.235,.035],[-.5,0,0],[1.05,.5,.9]);
-  mk(new SphereGeometry(.06,10,6),HAIR,head,[.01,.255,.06],[-.8,0,.15],[1.1,.45,.8]);
+  if(!face)mk(new SphereGeometry(.09,12,8),HAIR,head,[0,.235,.035],[-.5,0,0],[1.05,.5,.9]);
+  if(!face)mk(new SphereGeometry(.06,10,6),HAIR,head,[.01,.255,.06],[-.8,0,.15],[1.1,.45,.8]);
+  if(!face){
   // side hair
   mk(new BoxGeometry(.02,.07,.07),HAIR,head,[-.11,.17,-.01]);mk(new BoxGeometry(.02,.07,.07),HAIR,head,[.11,.17,-.01]);
   // beard (lower front cap) + moustache
@@ -52,6 +82,7 @@ function build(){
     J.pups.push(mk(new SphereGeometry(.0115,8,6),PUP,e,[0,0,.009]));
     const lid=mk(new SphereGeometry(.0235,10,8),SKIN,e,[0,.016,.002],[0,0,0],[1.15,.08,.75]);J.lids.push(lid);
     J.brows.push(mk(new BoxGeometry(.045,.012,.014),HAIR,head,[s*.045,.172,.112],[0,0,s*-.12]));
+  }
   }
   // arms
   J.sh=[];J.el=[];J.ha=[];
@@ -106,13 +137,13 @@ export function create(opts){
   scene.add(new HemisphereLight(0xEEF2FF,0x3A3530,1.6));
   const k=new DirectionalLight(0xFFF2E0,2.2);k.position.set(1.5,2.5,3);scene.add(k);
   const rim=new DirectionalLight(0x9DB4FF,1.2);rim.position.set(-2,2,-2);scene.add(rim);
-  const {root,J}=build();scene.add(root);
+  const {root,J}=build(opts.faceImg?faceTex(opts.faceImg):null);scene.add(root);
   const cur=JSON.parse(JSON.stringify(BASE));let tgt=JSON.parse(JSON.stringify(BASE));
   let mode='idle',gest='idle',gT=0,t=0,blinkT=1.5,blink=0,shiftT=3,shift=0,mouthV=0,hop=0,host=null,frame=.92,raf=0,last=0,visible=true,wavingT=0;
   function setPose(name){gest=name;const p=P[name]||{};tgt=JSON.parse(JSON.stringify(BASE));for(const k in p)tgt[k]=Array.isArray(p[k])?p[k].slice():p[k];}
   function lerp(a,b,f){return a+(b-a)*f}
   function step(dt){
-    t+=dt;const f=1-Math.exp(-dt*7);
+    t+=dt;const f=1-Math.exp(-dt*4.2);
     // gesture scheduler
     gT-=dt;
     if(wavingT>0){wavingT-=dt;if(gest!=='wave')setPose('wave');if(wavingT<=0)gT=0;}
@@ -155,20 +186,21 @@ export function create(opts){
     blink=Math.max(0,blink-dt*7);const b=Math.sin(blink*Math.PI);
     J.lids.forEach(l=>{l.scale.y=.08+b*.92;l.position.y=.016-b*.016});
     const bu=cur.brow*.008+(talkAmp?mouthV*.004:0);J.brows.forEach((x,i)=>{x.position.y=.172+bu});
-    J.mIn.scale.set(1-mouthV*.15,.15+mouthV*1.3,.4);J.mIn.position.y=-mouthV*.006;J.lip.position.y=-.006-mouthV*.012;
+    if(J.mIn){J.mIn.scale.set(1-mouthV*.15,.15+mouthV*1.3,.4);J.mIn.position.y=-mouthV*.006;J.lip.position.y=-.006-mouthV*.012;
     const lx=Math.sin(t*.37)*.003;J.pups.forEach(p=>{p.position.x=lx});
-    J.mous.position.y=.07+mouthV*.002;
+    J.mous.position.y=.07+mouthV*.002;}
+    if(J.F)J.F.draw(mouthV,b);
   }
   function render(){r.render(scene,cam)}
   function loop(now){raf=requestAnimationFrame(loop);if(!visible||!host||document.hidden){last=now;return}
-    const dt=Math.min(.05,(now-(last||now))/1000);if(opts.lowFps&&dt<1/32&&last){return}last=now;step(dt);render()}
+    const dt=Math.min(.05,(now-(last||now))/1000);last=now;step(dt);render()}
   function size(){if(!host)return;const w=host.clientWidth||1,h=host.clientHeight||1;r.setSize(w,h,false);cam.aspect=w/h;
-    const vis=frame,d=(vis/2)/Math.tan(cam.fov*Math.PI/360);cam.position.set(0,.98,d);cam.lookAt(0,.98,0);
+    const vis=frame,d=(vis/2)/Math.tan(cam.fov*Math.PI/360);cam.position.set(0,1.0,d);cam.lookAt(0,1.0,0);
     if(w/h>.75){cam.position.y=.95;cam.lookAt(0,.95,0)}cam.updateProjectionMatrix();}
   const ro=typeof ResizeObserver!=='undefined'?new ResizeObserver(size):null;
   const api={
     canvas:r.domElement,
-    attach(el,fr){host=el;frame=fr||2.14;el.appendChild(r.domElement);ro&&(ro.disconnect(),ro.observe(el));size();step(0);render()},
+    attach(el,fr){host=el;frame=fr||2.2;el.appendChild(r.domElement);ro&&(ro.disconnect(),ro.observe(el));size();step(0);render()},
     setMode(m){if(m===mode)return;mode=m;gT=0},
     wave(){wavingT=2.4},
     hop(){hop=1},

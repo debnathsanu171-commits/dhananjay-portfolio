@@ -1,5 +1,6 @@
 import {originOk,json} from '../_shared.js';
-const PACE=1.0, QC=true, SPEAKER='shubh';
+import {secMsGec,TOKEN} from '../_gec.js';
+const VOICE={en:'en-IN-PrabhatNeural',hi:'hi-IN-MadhurNeural',bn:'bn-IN-BashkarNeural'};
 const DG={en:['zero','one','two','three','four','five','six','seven','eight','nine'],
 hi:['शून्य','एक','दो','तीन','चार','पाँच','छह','सात','आठ','नौ'],
 bn:['শূন্য','এক','দুই','তিন','চার','পাঁচ','ছয়','সাত','আট','নয়']};
@@ -56,21 +57,43 @@ export function normalize(t,lang){
   t=t.replace(/[(){}\[\]"“”'‘’]/g,' ').replace(/\s*\/\s*/g,lang==='en'?' or ':' / ').replace(/[;:]/g,',').replace(/\.{2,}|…/g,'.');
   return t.replace(/\s{2,}/g,' ').replace(/\s+([,.।?!])/g,'$1').replace(/,\s*([,.।?!])/g,'$1').replace(/^[,\s]+/,'').trim();
 }
-const b64=a=>Uint8Array.from(atob(a),c=>c.charCodeAt(0));
+
 const HING=/\b(kya|hai|hain|ka|ki|ke|ko|se|mein|main|mera|meri|mere|aur|nahi|kaise|kitna|unka|unke|woh|wo|yeh|ye|saal|karta|karte|kar|tha|thi|hoon|hun|aap|apna|sab|bhi|toh|par|liye|chahenge|ami|amar|amake|tumi|apni|apnar|ache|achhe|kore|kori|korte|bochor|ebong|kintu|theke|ar|er|e|te|ke|nije|jonno|niye|ki|na|hobe)\b/i;
-const TECH=new Set('cnc bom ppc qc cv ai 2d 3d xml pur biesse homag jai hunny impex kdt altendorf spazio autocad naadi maxcut excel google sheets chatgpt whatsapp email production manager machine machines software team planning quality control dispatch installation design experience modular furniture factory cut list cutting operator edge banding boring panel saw program programs training interview role roles salary availability contact page details site portfolio operator manufacturing hands-on handle'.split(' '));
+const TECH=new Set('rs inr ctc expectation accommodation month cnc bom ppc qc cv ai 2d 3d xml pur biesse homag jai hunny impex kdt altendorf spazio autocad naadi maxcut excel google sheets chatgpt whatsapp email production manager machine machines software team planning quality control dispatch installation design experience modular furniture factory cut list cutting operator edge banding boring panel saw program programs training interview role roles salary availability contact page details site portfolio operator manufacturing hands-on handle'.split(' '));
 export function detect(t,hint){if(/[\u0980-\u09FF]/.test(t))return 'bn';if(/[\u0900-\u097F]/.test(t))return 'hi';if((hint==='hi'||hint==='bn')&&HING.test(t))return hint+'-rom';return 'en'}
-async function tl1(t,lang,env){try{const r=await fetch('https://api.sarvam.ai/transliterate',{method:'POST',headers:{'api-subscription-key':env.SARVAM_API_KEY,'content-type':'application/json'},body:JSON.stringify({input:t,source_language_code:'en-IN',target_language_code:lang+'-IN'})});if(r.ok){const d=await r.json();if(d.transliterated_text)return d.transliterated_text}}catch(e){}return t}
+// free Google Input Tools transliteration (Roman -> native script), no key
+async function tl1(t,lang){const seg=t.split(/([^A-Za-z']+)/);if(seg.length>1)return (await Promise.all(seg.map(x=>/[A-Za-z]/.test(x)?tl0(x,lang):x))).join('');return tl0(t,lang)}
+async function tl0(t,lang){try{const r=await fetch('https://inputtools.google.com/request?itc='+lang+'-t-i0-und&num=1&cp=0&cs=1&ie=utf-8&oe=utf-8&text='+encodeURIComponent(t));if(r.ok){const d=await r.json();if(d[0]==='SUCCESS'&&d[1]?.[0]?.[1]?.[0])return d[1][0][1][0]}}catch(e){}return t}
 // Roman Hinglish/Banglish -> native script, keeping English technical words (and Capitalised names of tools/brands) in Latin
 async function translit(t,lang,env){
   const parts=t.split(/(\s+)/),runs=[];let cur=null;
   for(const p of parts){const w=p.replace(/[^A-Za-z0-9-]/g,'').toLowerCase();const keep=!/\S/.test(p)?null:(!/[A-Za-z]/.test(p)||TECH.has(w)||/^[A-Z0-9]{2,}$/.test(p.replace(/[^A-Za-z0-9]/g,'')));
     if(keep===null){(cur||(cur={k:true,s:'',ws:true})).s+=p;continue}
     if(!cur||cur.k!==keep||cur.ws&&cur.k!==keep){if(cur&&cur.ws&&!runs.includes(cur)){cur.k=keep;cur.ws=false;cur.s+=p;runs.push(cur);continue}cur={k:keep,s:p};runs.push(cur)}else cur.s+=p}
-  const out=await Promise.all(runs.map(r=>r.k||!/[A-Za-z]/.test(r.s)?r.s:tl1(r.s.trim(),lang,env).then(x=>(r.s.match(/^\s*/)[0])+x+(r.s.match(/\s*$/)[0]))));
+  const out=await Promise.all(runs.map(r=>r.k||!/[A-Za-z]/.test(r.s)?r.s:tl1(r.s.trim(),lang).then(x=>(r.s.match(/^\s*/)[0])+x+(r.s.match(/\s*$/)[0]))));
   return out.join('').replace(/\s{2,}/g,' ').trim();
 }
 const out=(bin,ct,v)=>new Response(bin,{headers:{'content-type':ct,'cache-control':'no-store','x-voice':v}});
+const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const uid=()=>crypto.randomUUID().replace(/-/g,'');
+const ts=()=>new Date().toUTCString().replace('GMT','GMT+0000 (Coordinated Universal Time)');
+async function edgeTTS(text,voice,rate){
+  const url='https://speech.platform.bing.com/consumer/speech/synthesize/readaloud/edge/v1?TrustedClientToken='+TOKEN+'&ConnectionId='+uid()+'&Sec-MS-GEC='+secMsGec(Date.now()/1000)+'&Sec-MS-GEC-Version=2-143.0.3650.75';
+  const r=await fetch(url,{headers:{Upgrade:'websocket',Origin:'chrome-extension://jdiccldimpdaibmpdkjnbmckianbfold','User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0',Pragma:'no-cache','Cache-Control':'no-cache',Cookie:'muid='+uid().toUpperCase()+';'}});
+  const ws=r.webSocket;if(!ws)throw new Error('ws '+r.status);ws.accept();
+  const chunks=[];
+  const done=new Promise((res,rej)=>{const to=setTimeout(()=>rej(new Error('timeout')),20000);
+    ws.addEventListener('message',e=>{const m=e.data;
+      if(typeof m==='string'){if(m.includes('Path:turn.end')){clearTimeout(to);res()}}
+      else chunks.push((m instanceof ArrayBuffer?Promise.resolve(m):m.arrayBuffer()).then(ab=>{const u=new Uint8Array(ab);const hl=(u[0]<<8)|u[1];const h=new TextDecoder().decode(u.subarray(2,2+hl));return h.includes('Path:audio')?u.subarray(2+hl):new Uint8Array(0)}))});
+    ws.addEventListener('close',()=>{clearTimeout(to);chunks.length?res():rej(new Error('closed'))});ws.addEventListener('error',()=>{clearTimeout(to);rej(new Error('wserr'))});});
+  ws.send('X-Timestamp:'+ts()+'\r\nContent-Type:application/json; charset=utf-8\r\nPath:speech.config\r\n\r\n{"context":{"synthesis":{"audio":{"metadataoptions":{"sentenceBoundaryEnabled":"false","wordBoundaryEnabled":"false"},"outputFormat":"audio-24khz-48kbitrate-mono-mp3"}}}}\r\n');
+  const ssml="<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='en-US'><voice name='"+voice+"'><prosody pitch='+0Hz' rate='"+rate+"' volume='+0%'>"+esc(text)+"</prosody></voice></speak>";
+  ws.send('X-RequestId:'+uid()+'\r\nContent-Type:application/ssml+xml\r\nX-Timestamp:'+ts()+'Z\r\nPath:ssml\r\n\r\n'+ssml);
+  await done;try{ws.close()}catch(e){}
+  const parts=await Promise.all(chunks);
+  const n=parts.reduce((a,c)=>a+c.length,0);if(!n)throw new Error('no audio');const o=new Uint8Array(n);let i=0;for(const c of parts){o.set(c,i);i+=c.length}return o;
+}
 export async function onRequestPost({request,env}){
   if(!originOk(request))return json({error:'forbidden'},403);
   let b;try{b=await request.json();}catch{return json({error:'bad json'},400);}
@@ -79,17 +102,7 @@ export async function onRequestPost({request,env}){
   let lang=detect(raw,hint);
   if(lang.endsWith('-rom')){lang=lang.slice(0,2);raw=await translit(raw,lang,env);}
   const text=normalize(raw,lang).slice(0,900);if(!text)return json({error:'empty'},400);
-  const lc=lang+'-IN';
-  if(env.USE_CLONE==='1'&&env.SARVAM_VOICE_ID){ // clone path disabled by default
-    try{
-      const f=new FormData();f.append('text',text);f.append('voice_id',env.SARVAM_VOICE_ID);f.append('language_code',lc);f.append('pace',String(env.TTS_PACE||PACE));
-      f.append('output_audio_codec','wav');f.append('speech_sample_rate','24000');f.append('enable_text_normalization','true');if(QC)f.append('enable_qc','true');
-      const r=await fetch('https://api.sarvam.ai/voices/clone',{method:'POST',headers:{'api-subscription-key':env.SARVAM_API_KEY},body:f});
-      if(r.ok){const d=await r.json();if(d.audio_b64)return out(b64(d.audio_b64),'audio/wav','clone');}
-    }catch(e){}
-  }
-  const r=await fetch('https://api.sarvam.ai/text-to-speech',{method:'POST',headers:{'api-subscription-key':env.SARVAM_API_KEY,'content-type':'application/json'},body:JSON.stringify({inputs:[text],target_language_code:lc,model:'bulbul:v3',speaker:env.TTS_SPEAKER||SPEAKER,pace:Number(env.TTS_PACE||PACE),temperature:0.5,speech_sample_rate:24000,output_audio_codec:'wav'})});
-  if(!r.ok)return json({error:'upstream',status:r.status},502);
-  const d=await r.json(); const a=d.audios?.[0]; if(!a)return json({error:'no audio'},502);
-  return out(b64(a),'audio/wav',env.TTS_SPEAKER||SPEAKER);
+  const voice=VOICE[lang];let err;
+  for(let k=0;k<2;k++){try{return out(await edgeTTS(text,voice,env.TTS_RATE||'+0%'),'audio/mpeg',voice)}catch(e){err=String(e.message||e)}}
+  return json({error:'tts failed',detail:err,fallback:'speechSynthesis'},502);
 }

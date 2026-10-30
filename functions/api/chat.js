@@ -36,8 +36,10 @@ EXTRA FACTS:
 - Machines: Biesse Rover Gold 1232 CNC (operation and preventive maintenance), Biesse Selco SK 3 beam saw, Biesse Jade 340 and Akron 1440 edge banders; Jai Industries J-3200.in panel saw, Optimus OptiSaw 3.2 digital panel saw, J-4550.in and Optimus OptiEdge edge banders, 38-spindle multi boring, Optimus multi-boring; Hunny Impex Hi-700 PUR edge bander, Hi-202 two-head multi boring, Hi-320 panel saw; KDT 38-spindle multi boring; Homag EDGETEQ edge bander; Altendorf F 45 panel saw, Shrichakra hot press, spindle moulder grooving.
 - Credentials: Biesse CNC Operation & Preventive Maintenance training by Biesse engineer; Spazio 3D Cabinet Design & Optimization trained by Biesse engineer; Naadi 3D design software training (2026); Secondary (10th) 2015, WBBSE. Languages: Bengali native, Hindi fluent, English working proficiency. References available on request.
 - Contact: phone/WhatsApp +91 77976 91585, email debnathofficial07@gmail.com, CV via the Download CV button on the site.`;
+const RL=new Map();
 export async function onRequestPost({request,env}){
   if(!originOk(request))return json({error:'forbidden'},403);
+  const ip=request.headers.get('cf-connecting-ip')||'x',now=Date.now(),h=(RL.get(ip)||[]).filter(x=>now-x<600000);if(h.length>=25)return json({reply:"Too many messages in a short time. Please wait a few minutes or WhatsApp me at +91 77976 91585.",sec:'none'},429);h.push(now);RL.set(ip,h);if(RL.size>5000)RL.clear();
   let b;try{b=await request.json();}catch{return json({error:'bad json'},400);}
   const msgs=Array.isArray(b.messages)?b.messages:[];
   const users=msgs.filter(m=>m&&m.role==='user').length;
@@ -53,11 +55,8 @@ export async function onRequestPost({request,env}){
   const sysMsg={role:'system',content:SYS+`\nIMPORTANT: Write this reply entirely in ${lh}. Give a full, specific answer.`};
   let d=null;
   if(env.XAI_API_KEY&&env.USE_GROK==='1'){try{const g=await fetch('https://api.x.ai/v1/chat/completions',{method:'POST',headers:{authorization:'Bearer '+env.XAI_API_KEY,'content-type':'application/json'},body:JSON.stringify({model:env.XAI_MODEL||'grok-4.7',messages:[sysMsg,...clean],max_tokens:1200,temperature:0.5})});if(g.ok)d=await g.json();}catch(e){}}
-  if(!d){
-  const r=await fetch('https://api.sarvam.ai/v1/chat/completions',{method:'POST',headers:{'api-subscription-key':env.SARVAM_API_KEY,'content-type':'application/json'},body:JSON.stringify({model:'sarvam-105b-conversations',messages:[{role:'system',content:SYS+`\nIMPORTANT: Write this reply entirely in ${lh}. Give a full, specific answer from the knowledge base.`},...clean],max_tokens:1200,temperature:0.4})});
-  if(!r.ok)return json({error:'upstream',status:r.status},502);
-  d=await r.json();
-  }
+  if(!d&&env.AI){for(const m of [env.CF_MODEL||'@cf/meta/llama-3.3-70b-instruct-fp8-fast','@cf/meta/llama-3.1-8b-instruct-fast']){try{const r=await env.AI.run(m,{messages:[sysMsg,...clean],max_tokens:700,temperature:0.4});const c=typeof r?.response==='string'?r.response:r?.choices?.[0]?.message?.content;if(c){d={choices:[{message:{content:c}}]};break}}catch(e){}}}
+  if(!d)return json({error:'upstream'},502);
   let t=(d.choices?.[0]?.message?.content||'').replace(/<think>[\s\S]*?<\/think>/g,'');let sec=null;t=t.replace(/\[\[\s*sec\s*:\s*([a-z]+)\s*\]\]/gi,(m,x)=>{sec=x.toLowerCase();return ''}).replace(/\[\[[^\]]*\]\]/g,'').replace(/[*#_`]/g,'').trim();
   return json({reply:t||"Sorry, I couldn't answer that. Please message me on WhatsApp at +91 77976 91585.",sec:['experience','machines','software','management','salary','credentials','gallery','contact','about'].includes(sec)?sec:'none'});
 }

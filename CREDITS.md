@@ -12,6 +12,6 @@ Machine photos are representative images from Wikimedia Commons, used under thei
 | assets/img/mach/spindle.* | [Shaper cubico center2.jpg](https://commons.wikimedia.org/wiki/File:Shaper_cubico_center2.jpg) | Dschamal Berger | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
 | assets/img/mach/hot-press.* | [Dornbirn-Furnierpresse-Langzauner-05.jpg](https://commons.wikimedia.org/wiki/File:Dornbirn-Furnierpresse-Langzauner-05.jpg) | Asurnipal | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
 
-Company logo: Kutchina logo from the official site https://www.kutchina.com/assets/images/Kutchina-White-Logo.png (trademark of its owner, used only to identify a former employer). Other employers are shown as monogram badges (no official logo found).
+Company logo: Kutchina logo from the official site https://www.kutchina.com/assets/images/Kutchina-White-Logo.png (trademark of its owner, used only to identify a former employer). Other employers (Timber Tech, Kiran Furniture, Designer Private Limited) are shown as monogram badges (no official logo found).
 
 Work gallery photos and video: own work, Dhananjay Debnath.

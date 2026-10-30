@@ -21,3 +21,10 @@ Work gallery photos and video: own work, Dhananjay Debnath.
 | assets/img/mach/jai-multi-boring.* | Jai Modula multi boring | https://www.jaiindustries.com/multiborings.html — © Jai Industries |
 | assets/img/mach/jai-optibore.* | Jai Optimus Optibore 5-09 five-side CNC boring | https://www.jaiindustries.com/optibore-5-09-five-side-cnc-boring.html — © Jai Industries |
 | assets/img/mach/srichakra-hot-press.* | Srichakra veneer/laminate hot press | https://www.srichakraengineering.com/ (veneer/laminate bonding press) — © Srichakra Engineering Equipments |
+
+## Company logos (trademarks of their owners, used to identify employers)
+
+| File | Company | Source |
+|---|---|---|
+| assets/img/logo/kiran.* | Kiran — Kanika Furniture (P) Ltd, Bhubaneswar | https://kanikafurniture.com/images/logo.png |
+| assets/img/logo/woodaura.* | WoodAura, Raipur | LinkedIn company page https://www.linkedin.com/company/woodaura |

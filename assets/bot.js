@@ -1,7 +1,7 @@
 (function(){
 if(window.__ddb)return;window.__ddb=1;
 var C='#455CE9',D='#1C1D20',W='917797691585',EM='debnathofficial07@gmail.com',CV='resume.pdf';
-var SRC=(document.currentScript&&document.currentScript.src)||location.origin+'/assets/bot.js',BASE=SRC.replace(/[^\/]*$/,''),POSTER=BASE+'img/avatar3d-poster.png?v=3';
+var SRC=(document.currentScript&&document.currentScript.src)||location.origin+'/assets/bot.js',BASE=SRC.replace(/[^\/]*$/,''),POSTER=BASE+'img/avatar3d-poster.png?v=4';
 var RM=matchMedia('(prefers-reduced-motion: reduce)').matches,MOB=function(){return innerWidth<600};
 var css='#ddb{font:14px/1.45 Inter,system-ui,-apple-system,Segoe UI,sans-serif;color:'+D+'}'
 +'#ddb button{font:inherit}#ddb em{font-style:normal}#ddb :focus-visible{outline:2px solid '+C+';outline-offset:2px}'
@@ -72,7 +72,7 @@ function host(){return isO()?q('.ddhc'):q('.ddhs')}
 function avMode(m){avState=m;if(AV)AV.setMode(m)}
 function avAttach(){if(!AV)return;var h=host();AV.attach(h);requestAnimationFrame(function(){h.classList.add('live');(h===q('.ddhc')?q('.ddhs'):q('.ddhc')).classList.remove('live')})}
 function loadAV(){if(RM||AV)return;try{var c=document.createElement('canvas');if(!(c.getContext('webgl2')||c.getContext('webgl')))return}catch(e){return}
-import(BASE+'avatar3d.js?v=5').then(function(m){AV=m.create({level:level});avAttach();AV.setMode(avState);AV.start();window.__ddbAV=AV}).catch(function(){})}
+import(BASE+'avatar3d.js?v=6').then(function(m){var a=m.create({level:level});a.whenReady(function(err){if(err)return;AV=a;avAttach();AV.setMode(avState);AV.start();window.__ddbAV=AV})}).catch(function(){})}
 function idle(f){(window.requestIdleCallback||function(cb){setTimeout(cb,300)})(f,{timeout:2500})}
 if(document.readyState==='complete')idle(loadAV);else addEventListener('load',function(){idle(loadAV)});
 // ---------- single audio controller ----------
@@ -138,7 +138,7 @@ function typing(){var d=el('div','m b ty','<span></span><span></span><span></spa
 function cap1(a){var s=splitS(a);return s.slice(0,2).join(' ')}
 function botMsg(a,k,speak){var d=add('','b');type(d,a,function(){if(k){card(k[0]);if(k[2])spBtn(k[2]);chips(k[0])}else chips('start');ms.scrollTop=1e5;if(!isO()&&!A.talking)w.classList.add('un')});if(!isO())showBub(cap1(a),Math.max(6000,a.length*75));if(speak!==false)say(a)}
 function ask(t){t=String(t).trim().slice(0,500);if(!t||busy)return;pend=null;stopSpeech();busy=true;q('.dch').innerHTML='';add(t,'u');hist.push({role:'user',content:t});save();var p=typing();avMode('think');if(!isO()){showBub('…');if(MV.st==='corner')toCenter()}var ki=intent(t);
-var msgs=hist.slice(-8).map(function(m){return{role:m.role,content:m.content}});msgs[msgs.length-1].content+=L[lang].hint;
+var msgs=hist.slice(-20).map(function(m){return{role:m.role,content:m.content}});msgs[msgs.length-1].content+=L[lang].hint;
 fetch('/api/chat',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({messages:msgs,lang:lang})}).then(function(r){return r.json()}).then(function(d){if(d.sec)window.__ddbSec=d.sec;else window.__ddbSec=null;return d.reply||"Sorry, something went wrong. Please WhatsApp me at +91 77976 91585."},function(){return 'Network error, please try again.'}).then(function(a){p.remove();avMode('idle');var ks=window.__ddbSec&&window.__ddbSec!=='none'?K.filter(function(x){return x[0]===window.__ddbSec})[0]:null;if(ks&&!(ki&&ki[0]==='machines'))ki=ks;var k=ki||intent(a);hist.push({role:'assistant',content:a,k:k&&k[0]});save();botMsg(a,k);if(k&&k[2]&&ki)setTimeout(function(){showSec(k[2])},900);busy=false})}
 function pitch(){q('.dch').innerHTML='';var t=P[lang];pend=null;add(t.split('?')[0]+'?','u');botMsg(t,K[0]);wave()}
 function greet(){var g=L[lang].g;ms.innerHTML='';hist=[];save();botMsg(g,null);wave()}

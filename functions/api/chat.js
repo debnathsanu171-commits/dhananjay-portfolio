@@ -13,7 +13,11 @@ HOW TO ANSWER:
 
 LANGUAGE: Reply in the visitor's style: English, casual Hinglish, or casual Banglish. Hinglish and Banglish must be in Roman letters only, in the relaxed way a young Indian professional talks, mixing English words naturally (machine, production, CNC, team, planning, experience). Never use pure formal Hindi or Bengali. Write names in normal case and the email exactly as debnathofficial07@gmail.com.
 
-UNDERSTANDING: Visitors often ask loosely, with typos, or in Hinglish or Banglish (for example 'kaun si machine chalate ho', 'koto bochor kaj korcho', 'kab join kar sakte ho', 'kahan se ho'). Work out which part of my profile they mean and answer it fully. If a question has nothing to do with my work or profile, politely say I only talk about my work as a Production Manager and suggest one good question to ask.
+UNDERSTANDING: Visitors often ask loosely, with typos, or in Hinglish or Banglish (for example 'kaun si machine chalate ho', 'koto bochor kaj korcho', 'kab join kar sakte ho', 'kahan se ho'). Work out which part of my profile they mean and answer it fully. FOLLOW-UPS: Use the earlier conversation. Resolve words like 'that machine', 'there', 'uska', 'oita' from previous turns, and do not repeat what you already said. If a question is truly ambiguous, ask one short clarifying question instead of guessing.
+If a question has nothing to do with my work, my profile or modular furniture manufacturing, politely say I only talk about my work and the furniture industry and suggest one good question to ask.
+
+INDUSTRY EXPERT: You may also answer general questions about modular furniture manufacturing as an experienced expert: board types (MDF, HDHMR, particle board, plywood, pre-lam, laminates, acrylic), edge banding and PUR vs EVA hot melt, CNC nesting and routing, beam saw and panel optimisation, boring and hinge drilling, hardware (Hettich, Hafele, Blum, Ebco and similar: hinges, channels, lift-ups), BOM and cut lists, production planning and control, quality control, wastage reduction, packing, dispatch and site installation. Frame this as general industry knowledge ("In general...", "Usually in the industry..."), give practical, correct, specific guidance, and only link it to my own experience where the knowledge base supports it. Never present general facts as my personal achievements or numbers. Use [[sec:none]] or the closest section for these.
+STRUCTURE: For longer answers, organise the spoken answer clearly: one opening line with the direct answer, then the key points in order using words like First, Second, Finally, then a short wrap-up. No bullet symbols or markdown, because the answer is spoken aloud.
 
 HONESTY: Only if a visitor directly asks whether this is a bot, an AI, or the real person, say plainly that I am an AI version of Dhananjay and that they can reach the real Dhananjay on WhatsApp at +91 77976 91585.
 NO INVENTION: Use only facts from the knowledge base and extra facts below. Never invent numbers, team sizes, clients, salaries, projects or certificates. Never name clients or customers. My notice period and joining date are not known; never claim I can join immediately or give a date, say joining can be discussed on WhatsApp. If a detail is missing, say I do not have that detail here and suggest WhatsApp.
@@ -39,16 +43,21 @@ export async function onRequestPost({request,env}){
   const users=msgs.filter(m=>m&&m.role==='user').length;
   if(!users)return json({error:'empty'},400);
   if(users>12)return json({reply:"We've reached the chat limit for this session. Please download my CV or message me on WhatsApp at +91 77976 91585."});
-  const clean=msgs.slice(-8).filter(m=>m&&(m.role==='user'||m.role==='assistant')&&typeof m.content==='string').map(m=>({role:m.role,content:m.content.slice(0,500)}));
+  const clean=msgs.slice(-20).filter(m=>m&&(m.role==='user'||m.role==='assistant')&&typeof m.content==='string').map(m=>({role:m.role,content:m.content.slice(0,500)}));
   const last=clean[clean.length-1]?.content||'';
   const hl=b.lang==='hi'||b.lang==='bn'?b.lang:null;
   const banglish=/\b(ami|tumi|apni|kemon|koto|ache|achhe|ki kore|bolo|bolun|kothay|kaj|chakri|naki|keno)\b/i.test(last);
   const hinglish=/\b(kya|hai|hain|kitna|kab|kaise|karte|nahi|aur|unka|mein|kar|batao|bataiye)\b/i.test(last);
   const lh=/[\u0980-\u09FF]/.test(last)||banglish||hl==='bn'?'casual Banglish (Bengali written in Roman letters, mixed naturally with English words)':/[\u0900-\u097F]/.test(last)||hinglish||hl==='hi'?'casual Hinglish (Hindi written in Roman letters, mixed naturally with English words)':'English';
   while(clean.length&&clean[0].role!=='user')clean.shift();
-  const r=await fetch('https://api.sarvam.ai/v1/chat/completions',{method:'POST',headers:{'api-subscription-key':env.SARVAM_API_KEY,'content-type':'application/json'},body:JSON.stringify({model:'sarvam-105b-conversations',messages:[{role:'system',content:SYS+`\nIMPORTANT: Write this reply entirely in ${lh}. Give a full, specific answer from the knowledge base.`},...clean],max_tokens:1200,temperature:0.3})});
+  const sysMsg={role:'system',content:SYS+`\nIMPORTANT: Write this reply entirely in ${lh}. Give a full, specific answer.`};
+  let d=null;
+  if(env.XAI_API_KEY&&env.USE_GROK==='1'){try{const g=await fetch('https://api.x.ai/v1/chat/completions',{method:'POST',headers:{authorization:'Bearer '+env.XAI_API_KEY,'content-type':'application/json'},body:JSON.stringify({model:env.XAI_MODEL||'grok-4.7',messages:[sysMsg,...clean],max_tokens:1200,temperature:0.5})});if(g.ok)d=await g.json();}catch(e){}}
+  if(!d){
+  const r=await fetch('https://api.sarvam.ai/v1/chat/completions',{method:'POST',headers:{'api-subscription-key':env.SARVAM_API_KEY,'content-type':'application/json'},body:JSON.stringify({model:'sarvam-105b-conversations',messages:[{role:'system',content:SYS+`\nIMPORTANT: Write this reply entirely in ${lh}. Give a full, specific answer from the knowledge base.`},...clean],max_tokens:1200,temperature:0.4})});
   if(!r.ok)return json({error:'upstream',status:r.status},502);
-  const d=await r.json();
+  d=await r.json();
+  }
   let t=(d.choices?.[0]?.message?.content||'').replace(/<think>[\s\S]*?<\/think>/g,'');let sec=null;t=t.replace(/\[\[\s*sec\s*:\s*([a-z]+)\s*\]\]/gi,(m,x)=>{sec=x.toLowerCase();return ''}).replace(/\[\[[^\]]*\]\]/g,'').replace(/[*#_`]/g,'').trim();
   return json({reply:t||"Sorry, I couldn't answer that. Please message me on WhatsApp at +91 77976 91585.",sec:['experience','machines','software','management','salary','credentials','gallery','contact','about'].includes(sec)?sec:'none'});
 }

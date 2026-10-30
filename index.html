@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Dhananjay Debnath – Production Manager | Modular Furniture Manufacturing</title>
 <meta name="description" content="Dhananjay (Sanu) Debnath – Production Manager with 10 years in modular furniture manufacturing. Biesse CNC, beam & panel saw, edge banding, Spazio 3D, AutoCAD 2D, PPC, BOM and team leadership. Based in Kolkata, India.">
-<meta name="theme-color" content="#ffffff">
+<meta name="theme-color" content="#07060B">
 <link rel="canonical" href="https://dhananjay-portfolio.pages.dev/">
 <meta property="og:type" content="profile">
 <meta property="og:title" content="Dhananjay Debnath – Production Manager | Modular Furniture Manufacturing">
@@ -16,7 +16,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="favicon.ico" sizes="32x32"><link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preload" href="assets/fonts/inter.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" as="image" href="assets/img/dd-480.avif" imagesrcset="assets/img/dd-480.avif 480w, assets/img/dd-800.avif 800w" imagesizes="(min-width:480px) 420px, 92vw" type="image/avif">
+<link rel="preload" as="image" href="assets/img/dd-480.avif" imagesrcset="assets/img/dd-480.avif 480w, assets/img/dd-800.avif 800w" imagesizes="(min-width:700px) 800px, 480px" type="image/avif">
 <style>@font-face{font-family:Inter;src:url(assets/fonts/inter.woff2) format("woff2");font-weight:300 800;font-display:swap}
 :root{--w:#fff;--g:#f5f5f7;--tx:#1d1d1f;--mu:#6e6e73;--bl:#0071e3;--ln:#d2d2d7}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -141,13 +141,84 @@ footer a{color:#0066cc;text-decoration:underline}footer .wrap{display:flex;flex-
 .cr a,.fc a{text-decoration:underline}.cr{margin-top:18px;font-size:12px;color:var(--mu);text-align:center}
 .sg{background:linear-gradient(180deg,#fff,#fbfbfd)}.sg h2{font-size:16px}.sg svg{width:22px;height:22px;padding:4px;border-radius:7px;background:var(--g);box-sizing:content-box}.sg li{color:var(--tx);position:relative;padding-left:14px}.sg li:before{content:"";position:absolute;left:0;top:.62em;width:5px;height:5px;border-radius:50%;background:var(--bl)}
 @media(max-width:600px){.job .box{padding:18px}.jh{flex-wrap:wrap;gap:12px}.lg{flex-basis:46px;height:46px;border-radius:13px}.jt{flex:1 1 calc(100% - 60px)}.pill{order:3;margin-left:58px}.job h3{font-size:18px}.hl li{font-size:14.5px}.hl .hi{flex-basis:26px;width:26px;height:26px;padding:5px}.mg{gap:12px}.sg li{padding-left:0}.sg li:before{display:none}}
+
+/* ===== Neon theme: violet #8B5CF6 · magenta #EC4899 · cyan #22D3EE ===== */
+:root{--w:#07060B;--g:#13111B;--s2:#1B1826;--tx:#F4F2FA;--mu:#A9A6BC;--bl:#22D3EE;--ln:rgba(255,255,255,.09);--v:#8B5CF6;--p:#EC4899;--c:#22D3EE;--grad:linear-gradient(100deg,#8B5CF6,#EC4899 50%,#22D3EE)}
+html{background:var(--w);color-scheme:dark}body{background:var(--w);color:var(--tx)}
+a{color:var(--c)}.skip:focus{background:#000;color:#fff}
+.gt{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+header.nav{background:rgba(7,6,11,.55);border-bottom:1px solid var(--ln)}
+.mono{background:var(--grad);color:#fff}
+.btn.p{background:linear-gradient(100deg,#7C3AED,#BE185D);color:#fff;box-shadow:0 8px 30px -8px rgba(236,72,153,.55)}.btn.p:hover{background:linear-gradient(100deg,#6D28D9,#9D174D)}
+.btn.g{color:var(--tx);border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.03)}.btn.g:hover{background:rgba(255,255,255,.08);border-color:var(--c)}
+.btn{transition:transform .35s cubic-bezier(.2,.8,.2,1),background .2s,border-color .2s}
+/* intro */
+.pre{position:fixed;inset:0;z-index:300;background:#050409;display:grid;place-items:center;pointer-events:none;animation:preout .55s cubic-bezier(.7,0,.2,1) .55s forwards}
+.pre span{font-size:clamp(28px,5vw,48px);font-weight:700;letter-spacing:-.03em;color:#fff;animation:prein .5s cubic-bezier(.2,.8,.2,1) both}.pre b{color:var(--p)}
+@keyframes preout{to{transform:translateY(-100%);visibility:hidden}}@keyframes prein{from{opacity:0;transform:translateY(20px)}}
+/* hero */
+.hero{background:transparent;padding:0;text-align:center;overflow:hidden}
+.hx{position:relative;height:min(100svh,980px);min-height:560px;overflow:hidden;isolation:isolate;margin-top:-52px}
+.orbs{position:absolute;inset:0;z-index:-2;pointer-events:none}
+.orbs i{position:absolute;border-radius:50%;filter:blur(90px);opacity:.55;will-change:transform}
+.orbs i:nth-child(1){width:42vmax;height:42vmax;background:#8B5CF6;left:-14vmax;top:-10vmax;animation:drift 18s ease-in-out infinite alternate}
+.orbs i:nth-child(2){width:34vmax;height:34vmax;background:#EC4899;right:-12vmax;top:18%;opacity:.42;animation:drift 22s ease-in-out infinite alternate-reverse}
+.orbs i:nth-child(3){width:30vmax;height:30vmax;background:#22D3EE;left:32%;bottom:-18vmax;opacity:.32;animation:drift 26s ease-in-out infinite alternate}
+.hp{position:absolute;left:50%;bottom:0;transform:translateX(-50%);height:94%;aspect-ratio:4/5;z-index:-1}
+.hp img{width:100%;height:100%;object-fit:cover;-webkit-mask-image:radial-gradient(ellipse 50% 56% at 50% 44%,#000 62%,transparent 100%);mask-image:radial-gradient(ellipse 50% 56% at 50% 44%,#000 62%,transparent 100%)}
+.hside{position:absolute;right:max(4vw,22px);top:36%;text-align:left;font-size:clamp(17px,1.6vw,24px);line-height:1.35;font-weight:500;max-width:300px}
+.hside svg{width:26px;height:26px;margin-bottom:14px;color:var(--c)}
+.hbadge{position:absolute;left:max(4vw,22px);top:38%;display:flex;align-items:center;gap:10px;max-width:220px;text-align:left;font-size:15px;color:var(--tx);padding:12px 16px;border-radius:999px 999px 999px 999px;background:rgba(19,17,27,.6);border:1px solid var(--ln);backdrop-filter:blur(10px)}
+.dot{flex:0 0 9px;height:9px;border-radius:50%;background:#22D3EE;box-shadow:0 0 0 4px rgba(34,211,238,.18),0 0 14px #22D3EE}
+.mq{position:absolute;left:0;right:0;bottom:6%;display:flex;white-space:nowrap;font-size:clamp(84px,15vw,230px);font-weight:600;letter-spacing:-.05em;line-height:1;pointer-events:none}
+.mq-t{display:flex;flex:0 0 auto;animation:mq 26s linear infinite}
+.mq span{padding:0 .18em;color:#fff;text-shadow:0 0 40px rgba(139,92,246,.35)}.mq em{font-style:normal;color:transparent;background:var(--grad);-webkit-background-clip:text;background-clip:text;padding:0 .1em}
+@keyframes mq{to{transform:translateX(-100%)}}
+.hk{position:relative;padding-top:28px;padding-bottom:10px}
+.hk .kf{margin-top:0}.kf li{background:var(--g);border:1px solid var(--ln)}
+.kf li:nth-child(1){box-shadow:inset 0 1px 0 rgba(139,92,246,.6)}.kf li:nth-child(2){box-shadow:inset 0 1px 0 rgba(236,72,153,.6)}.kf li:nth-child(3){box-shadow:inset 0 1px 0 rgba(34,211,238,.6)}.kf li:nth-child(4){box-shadow:inset 0 1px 0 rgba(139,92,246,.6)}
+.em a{color:var(--c)}
+.sg{background:linear-gradient(180deg,#15131E,#100E17);border:1px solid var(--ln)}.sg svg{background:rgba(255,255,255,.06);color:#fff}
+.sg:nth-child(1) svg{color:#A78BFA}.sg:nth-child(2) svg{color:#F472B6}.sg:nth-child(3) svg{color:#22D3EE}
+.sg li:before{background:var(--grad)}
+/* sections */
+section{position:relative}section.alt{background:#0B0A11}section.dark{background:#050409}
+.sh .eyebrow{display:inline-block;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:13px}
+.sh h2{color:#fff}
+.card,.alt .card,.dark .card,#credentials .card{background:var(--g);border:1px solid var(--ln)}
+.card:hover,.mc:hover,.cl a:hover,.job .box:hover{box-shadow:0 0 0 1px rgba(139,92,246,.45),0 24px 60px -24px rgba(236,72,153,.45)}
+.ic,.dark .ic{background:linear-gradient(135deg,rgba(139,92,246,.22),rgba(236,72,153,.18));color:#F0ABFC}
+.kv{background:var(--g);border:1px solid var(--ln)}
+.stats div{background:var(--g);border:1px solid var(--ln)}.stats b{background:var(--grad);-webkit-background-clip:text;background-clip:text}
+.about p{color:#DCD9E8}
+.tl::before{background:rgba(255,255,255,.1)}.tl .ln{background:var(--grad)}
+.job::before{background:var(--w);border-color:var(--v)}.job.now::before{background:var(--p);border-color:var(--p);box-shadow:0 0 0 6px rgba(236,72,153,.18),0 0 18px var(--p)}
+.job .box{background:var(--g);border:1px solid var(--ln);box-shadow:none;transition:box-shadow .35s}
+.lg{background:linear-gradient(145deg,#211d2e,#2c2640)}.job.now .lg{background:var(--grad)}
+.pill{color:#E9D5FF;background:rgba(139,92,246,.16);border:1px solid rgba(139,92,246,.35)}
+.job.now .pill{color:#CFFAFE;background:rgba(34,211,238,.12);border-color:rgba(34,211,238,.35)}
+.meta span{background:rgba(255,255,255,.05)}
+.hl li,.job ul{color:#D4D1E2}.hl .hi{background:rgba(255,255,255,.06);color:#C4B5FD}.job.now .hl .hi{background:rgba(236,72,153,.14);color:#F9A8D4}
+.mc{background:var(--g);border:1px solid var(--ln)}.mc small{color:#F472B6}
+.mc:nth-child(3n+2) small{color:#22D3EE}.mc:nth-child(3n) small{color:#A78BFA}
+.chips span{background:var(--s2)}
+.bar{background:rgba(255,255,255,.08)}.bar i{background:var(--grad)}
+.gal figure,.vid{background:var(--g);border:1px solid var(--ln)}
+#lb{background:rgba(5,4,9,.95)}#lb p{color:#fff}#lb button{background:#1B1826;color:#fff}
+.cl a{background:var(--g);border:1px solid var(--ln);color:var(--tx)}
+footer{background:#050409;border-top:1px solid var(--ln)}footer a{color:var(--c)}
+.glow{width:640px;height:640px;margin:-320px 0 0 -320px;background:radial-gradient(circle,rgba(139,92,246,.16),rgba(236,72,153,.08) 40%,transparent 65%);z-index:0}
+.prog{background:var(--grad);height:3px}
+@media(max-width:760px){.hx{height:78svh;min-height:520px}.hp{height:86%}.hside{display:none}.hbadge{left:50%;top:auto;bottom:calc(6% + 24vw);transform:translateX(-50%);max-width:none;white-space:nowrap;font-size:12.5px;padding:8px 12px}.mq{font-size:23vw;bottom:5%}.hk{padding-top:18px}}
+@media(prefers-reduced-motion:reduce){.pre{display:none}.mq-t,.orbs i{animation:none!important}}
 </style>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Person","name":"Dhananjay Debnath","alternateName":"Sanu Debnath","jobTitle":"Production Manager","description":"Production Manager with 10 years of hands-on experience in modular furniture manufacturing.","url":"https://dhananjay-portfolio.pages.dev/","image":"https://dhananjay-portfolio.pages.dev/assets/img/dd-800.webp","email":"mailto:debnathofficial07@gmail.com","telephone":"+91-7797691585","address":{"@type":"PostalAddress","addressLocality":"Kolkata","addressRegion":"West Bengal","addressCountry":"IN"},"worksFor":{"@type":"Organization","name":"Timber Tech (Wood Aura)"},"knowsLanguage":["Bengali","Hindi","English"],"knowsAbout":["Modular furniture manufacturing","Biesse CNC boring","Beam saw","Panel saw","Edge banding","Spazio 3D","Naadi 3D design","AutoCAD 2D","Production Planning & Control","Bill of Materials","Cut list optimization","Quality control"],"hasCredential":[{"@type":"EducationalOccupationalCredential","name":"Biesse CNC Operation & Preventive Maintenance"},{"@type":"EducationalOccupationalCredential","name":"Spazio 3D Cabinet Design & Optimization"},{"@type":"EducationalOccupationalCredential","name":"Naadi 3D design software training (2026)"}]}
 </script>
 </head>
 <body>
-<div class="prog" aria-hidden="true"></div><div class="glow" aria-hidden="true"></div>
+<div class="pre" aria-hidden="true"><span>Dhananjay<b>.</b></span></div><div class="prog" aria-hidden="true"></div><div class="glow" aria-hidden="true"></div>
 <a class="skip" href="#main">Skip to content</a>
 <header class="nav"><div class="wrap">
 <a class="logo" href="#top"><span class="mono">DD</span><span>Dhananjay Debnath</span></a>
@@ -155,10 +226,16 @@ footer a{color:#0066cc;text-decoration:underline}footer .wrap{display:flex;flex-
 <a class="btn p sm" href="resume.pdf" download>Download CV</a>
 </div></header>
 <main id="main">
-<div class="hero" id="top"><div class="mesh" aria-hidden="true"><i></i><i></i><i></i></div><div class="wrap">
-<p class="eyebrow">Open to Production Manager roles across India</p>
-<h1>Dhananjay Debnath</h1>
-<p class="tag">Production Manager <span><i>· </i>Modular Furniture Manufacturing</span></p>
+<div class="hero" id="top">
+<div class="hx">
+<div class="orbs" aria-hidden="true"><i></i><i></i><i></i></div>
+<div class="hp"><picture><source type="image/avif" srcset="assets/img/dd-480.avif 480w, assets/img/dd-800.avif 800w" sizes="(min-width:700px) 800px, 480px"><source type="image/webp" srcset="assets/img/dd-480.webp 480w, assets/img/dd-800.webp 800w" sizes="(min-width:700px) 800px, 480px"><img src="assets/img/dd-400.jpg" width="400" height="500" class="hp-img" alt="Portrait of Dhananjay Debnath, Production Manager" fetchpriority="high" decoding="async"></picture></div>
+<div class="hside"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M7 7l10 10M17 8v9H8"/></svg><p>Production Manager<br><span class="gt">Modular Furniture Manufacturing</span></p></div>
+<div class="hbadge"><span class="dot"></span>Open to Production Manager roles across India</div>
+<h1 class="sr">Dhananjay Debnath – Production Manager, Modular Furniture Manufacturing</h1>
+<div class="mq" aria-hidden="true"><div class="mq-t"><span>Dhananjay Debnath</span><em aria-hidden="true">—</em><span>Dhananjay Debnath</span><em aria-hidden="true">—</em><span>Dhananjay Debnath</span><em aria-hidden="true">—</em><span>Dhananjay Debnath</span><em aria-hidden="true">—</em></div><div class="mq-t"><span>Dhananjay Debnath</span><em aria-hidden="true">—</em><span>Dhananjay Debnath</span><em aria-hidden="true">—</em><span>Dhananjay Debnath</span><em aria-hidden="true">—</em><span>Dhananjay Debnath</span><em aria-hidden="true">—</em></div></div>
+</div>
+<div class="wrap hk">
 <ul class="kf" aria-label="Key facts">
 <li><small>Current role</small><b>Production Manager</b><span>Timber Tech (Wood Aura) · since Mar 2024</span></li>
 <li><small>Experience</small><b>10 years</b><span>Modular furniture manufacturing</span></li>
@@ -172,7 +249,6 @@ footer a{color:#0066cc;text-decoration:underline}footer .wrap{display:flex;flex-
 </div>
 <p class="em"><a href="mailto:debnathofficial07@gmail.com">debnathofficial07@gmail.com</a></p>
 <div class="sgs" aria-label="Key skills"><div class="sg"><h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg>Machines</h2><ul><li>Biesse CNC boring / drilling</li><li>Altendorf panel saw &amp; beam saw</li><li>Multi boring</li><li>Edge banding</li><li>Spindle modular grooving</li><li>Jai Modular machines</li></ul></div><div class="sg"><h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>Management</h2><ul><li>Production planning &amp; control (PPC)</li><li>Cut list &amp; BOM management</li><li>Team &amp; shop-floor management</li><li>Material optimisation &amp; waste control</li><li>Quality control &amp; dispatch planning</li></ul></div><div class="sg"><h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>Software</h2><ul><li>Spazio 3D (design, cut list, CNC programs)</li><li>Naadi 3D design</li><li>AutoCAD 2D production drawings</li><li>Maxcut</li><li>Excel / Google Sheets</li></ul></div></div>
-<div class="photo"><picture><source type="image/avif" srcset="assets/img/dd-480.avif 480w, assets/img/dd-800.avif 800w" sizes="(min-width:480px) 420px, 92vw"><source type="image/webp" srcset="assets/img/dd-480.webp 480w, assets/img/dd-800.webp 800w" sizes="(min-width:480px) 420px, 92vw"><img src="assets/img/dd-400.jpg" width="400" height="500" alt="Portrait of Dhananjay Debnath, Production Manager" fetchpriority="high" decoding="async"></picture></div>
 </div></div>
 
 <section id="about"><div class="wrap">

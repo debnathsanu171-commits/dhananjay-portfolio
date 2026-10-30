@@ -1,33 +1,344 @@
 [
-{"q":"How many years of experience do you have?","must":["10|ten"]},
-{"q":"Where are you based?","must":["Kolkata"]},
-{"q":"What is your current job?","must":["Timber Tech|Wood Aura","Raipur","Production Manager"]},
-{"q":"When did you join Timber Tech?","must":["2024"]},
-{"q":"What did you do at Kutchina?","must":["Kutchina","Biesse","multi.?boring|panel saw"],"not":["Rover Gold"]},
-{"q":"Where is Kutchina located?","must":["Barrackpore"]},
-{"q":"What was your role at Kiran Furniture?","must":["All.?Rounder","Bhubaneswar|Odisha"]},
-{"q":"Which company did you start your career with?","must":["Designer Private","2016"]},
-{"q":"Which CNC machine have you worked on?","must":["Rover Gold 1232"]},
-{"q":"Which beam saw have you used?","must":["Selco SK ?3"]},
-{"q":"Which Biesse edge banders?","must":["Jade 340","Akron 1440"]},
-{"q":"Have you used Optimus machines?","must":["OptiSaw|OptiEdge|Optimus"]},
-{"q":"Do you know Homag machines?","must":["EDGETEQ"]},
-{"q":"Which Hunny Impex machines have you run?","must":["Hi-?700","Hi-?202|Hi-?320"]},
-{"q":"Which panel saw do you supervise now?","must":["Altendorf"]},
-{"q":"Which software do you use?","must":["Spazio","AutoCAD"]},
-{"q":"Which panel optimisation software do you use?","must":["MaxCut|B_?OPTI|Jinny"]},
-{"q":"What training or certifications do you have?","must":["Biesse","Spazio|Naadi"]},
-{"q":"What is your education?","must":["2015|10th|Secondary|WBBSE|West Bengal"]},
-{"q":"What is your salary expectation?","must":["50,?000|fifty thousand"]},
-{"q":"What is your notice period?","must":["WhatsApp|don.t have|do not have|not .*here"],"not":["immediately","\\b\\d+ (days|weeks|months) notice"]},
-{"q":"How can I contact you?","must":["77976 ?91585","debnathofficial07@gmail.com"]},
-{"q":"Which languages do you speak?","must":["Bengali","Hindi","English"]},
-{"q":"Explain your production workflow.","must":["site measurement|measurement","BOM|cut list","dispatch|installation"]},
-{"q":"Who are your clients?","not":["\\bclient(s)? (include|are|like) [A-Z]"]},
-{"q":"kitne saal ka experience hai aur kahan kaam karte ho?","must":["10","Timber Tech|Raipur"],"lang":"hi"},
-{"q":"kaun sa software use karte ho?","must":["Spazio"],"lang":"hi"},
-{"q":"salary kitna chahiye?","must":["50,?000"],"lang":"hi"},
-{"q":"apni kon kon Biesse machine chalan?","must":["Rover|Selco|Jade|Akron"],"lang":"bn","not":["\\b(aap|hai|hoon|karte|chahiye)\\b"]},
-{"q":"apnar education ki?","must":["2015|WBBSE|Secondary|10th|madhyamik"],"lang":"bn","not":["\\b(aap|hai|hoon|karte)\\b"]},
-{"q":"apni kothay theke?","must":["Kolkata"],"lang":"bn","not":["\\b(aap|hai|hoon|karte|chahiye)\\b"]}
+{
+"q": "How many years of experience do you have?",
+"must": [
+"10|ten"
+]
+},
+{
+"q": "Where are you based?",
+"must": [
+"Kolkata"
+]
+},
+{
+"q": "What is your current job?",
+"must": [
+"Timber Tech|Wood Aura",
+"Raipur",
+"Production Manager"
+]
+},
+{
+"q": "When did you join Timber Tech?",
+"must": [
+"2024"
+]
+},
+{
+"q": "What did you do at Kutchina?",
+"must": [
+"Kutchina",
+"Biesse",
+"multi.?boring|panel saw"
+],
+"not": [
+"Rover Gold"
+]
+},
+{
+"q": "Where is Kutchina located?",
+"must": [
+"Barrackpore"
+]
+},
+{
+"q": "What was your role at Kiran Furniture?",
+"must": [
+"All.?Rounder",
+"Bhubaneswar|Odisha"
+]
+},
+{
+"q": "Which company did you start your career with?",
+"must": [
+"Designer Private",
+"2016"
+]
+},
+{
+"q": "Which CNC machine have you worked on?",
+"must": [
+"Rover Gold 1232"
+]
+},
+{
+"q": "Which beam saw have you used?",
+"must": [
+"Selco SK ?3"
+]
+},
+{
+"q": "Which Biesse edge banders?",
+"must": [
+"Jade 340",
+"Akron 1440"
+]
+},
+{
+"q": "Have you used Optimus machines?",
+"must": [
+"OptiSaw|OptiEdge|Optimus"
+]
+},
+{
+"q": "Do you know Homag machines?",
+"must": [
+"EDGETEQ"
+]
+},
+{
+"q": "Which Hunny Impex machines have you run?",
+"must": [
+"Hi-?700",
+"Hi-?202|Hi-?320"
+]
+},
+{
+"q": "Which panel saw do you supervise now?",
+"must": [
+"Altendorf"
+]
+},
+{
+"q": "Which software do you use?",
+"must": [
+"Spazio",
+"AutoCAD"
+]
+},
+{
+"q": "Which panel optimisation software do you use?",
+"must": [
+"MaxCut|B_?OPTI|Jinny"
+]
+},
+{
+"q": "What training or certifications do you have?",
+"must": [
+"Biesse",
+"Spazio|Naadi"
+]
+},
+{
+"q": "What is your education?",
+"must": [
+"2015|10th|Secondary|WBBSE|West Bengal"
+]
+},
+{
+"q": "What is your salary expectation?",
+"must": [
+"50,?000|fifty thousand"
+]
+},
+{
+"q": "What is your notice period?",
+"must": [
+"WhatsApp|don.t have|do not have|not .*here"
+],
+"not": [
+"immediately",
+"\\b\\d+ (days|weeks|months) notice"
+]
+},
+{
+"q": "How can I contact you?",
+"must": [
+"77976 ?91585",
+"debnathofficial07@gmail.com"
+]
+},
+{
+"q": "Which languages do you speak?",
+"must": [
+"Bengali",
+"Hindi",
+"English"
+]
+},
+{
+"q": "Explain your production workflow.",
+"must": [
+"site measurement|measurement",
+"BOM|cut list",
+"dispatch|installation"
+]
+},
+{
+"q": "Who are your clients?",
+"not": [
+"\\bclient(s)? (include|are|like) [A-Z]"
+]
+},
+{
+"q": "kitne saal ka experience hai aur kahan kaam karte ho?",
+"must": [
+"10|ten",
+"Timber Tech|Raipur"
+],
+"lang": "hi"
+},
+{
+"q": "kaun sa software use karte ho?",
+"must": [
+"Spazio"
+],
+"lang": "hi"
+},
+{
+"q": "salary kitna chahiye?",
+"must": [
+"50,?000"
+],
+"lang": "hi"
+},
+{
+"q": "apni kon kon Biesse machine chalan?",
+"must": [
+"Rover|Selco|Jade|Akron"
+],
+"lang": "bn",
+"not": [
+"\\b(aap|hai|hoon|karte|chahiye)\\b"
+]
+},
+{
+"q": "apnar education ki?",
+"must": [
+"2015|WBBSE|Secondary|10th|madhyamik"
+],
+"lang": "bn",
+"not": [
+"\\b(aap|hai|hoon|karte)\\b"
+]
+},
+{
+"q": "apni kothay theke?",
+"must": [
+"Kolkata"
+],
+"lang": "bn",
+"not": [
+"\\b(aap|hai|hoon|karte|chahiye)\\b"
+]
+},
+{
+"q": "Jai",
+"must": [
+"Jai",
+"J-?3200|J-?4550|panel saw|edge bander|multi.?boring"
+],
+"not": [
+"not (about|related to) modular"
+]
+},
+{
+"q": "Jai er machine",
+"must": [
+"Jai|J-?3200|J-?4550"
+],
+"not": [
+"not (about|related to) modular"
+]
+},
+{
+"q": "Biesse",
+"must": [
+"Biesse",
+"Rover|Selco|Jade|Akron"
+],
+"not": [
+"not (about|related to) modular"
+]
+},
+{
+"q": "Homag ki",
+"must": [
+"Homag|EDGETEQ|Edgeteq"
+],
+"not": [
+"not (about|related to) modular"
+]
+},
+{
+"q": "bees machine",
+"must": [
+"Biesse"
+]
+},
+{
+"q": "edge bunder kaise kaam karta hai?",
+"must": [
+"edge",
+"glue|adhesive|hot.?melt|EVA|PUR"
+]
+},
+{
+"q": "What is the difference between MDF and HDF?",
+"must": [
+"MDF",
+"HDF",
+"densit"
+]
+},
+{
+"q": "Which hinges are used in modular kitchens?",
+"must": [
+"hinge",
+"soft.?clos|concealed|clip|Hettich|Blum|Hafele|Ebco"
+]
+},
+{
+"q": "How do you reduce wastage in panel cutting?",
+"must": [
+"optimi|nesting|offcut|waste"
+]
+},
+{
+"q": "Roughly what does a modular kitchen cost in India?",
+"must": [
+"lakh|Rs|rupee|₹|range"
+]
+},
+{
+"q": "What is your father's name?",
+"must": [
+"WhatsApp|77976"
+]
+},
+{
+"q": "What QC checks do you do before dispatch?",
+"must": [
+"check|inspect|QC|quality"
+]
+},
+{
+"q": "edge bander kya karta hai?",
+"must": [
+"edge",
+"glue|chipak|trim"
+]
+},
+{
+"q": "Which is the best CNC for a small factory?",
+"must": [
+"CNC|nesting",
+"budget|service|depend|need"
+]
+},
+{
+"q": "beam saw vs panel saw",
+"must": [
+"beam saw",
+"panel saw",
+"volume|stack|output"
+]
+},
+{
+"q": "What are the latest trends in modular kitchen design?",
+"must": [
+"kitchen"
+]
+}
 ]

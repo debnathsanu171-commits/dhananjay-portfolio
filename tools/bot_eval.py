@@ -10,8 +10,15 @@ def run(e):
     except Exception as ex:d={'reply':'ERR '+str(ex)}
   t=d.get('reply','');bad=[p for p in e.get('must',[]) if not re.search(p,t,re.I)]+['NOT:'+p for p in e.get('not',[]) if re.search(p,t,re.I if not p.startswith('\\b(') else re.I)]
   return e['q'],not bad,bad,d.get('model'),t
-with cf.ThreadPoolExecutor(4) as ex:res=list(ex.map(run,E))
+import time,os
+PACE=float(os.environ.get('PACE','0'))
+if PACE:
+  res=[]
+  for e in E:res.append(run(e));time.sleep(PACE)
+else:
+  with cf.ThreadPoolExecutor(4) as ex:res=list(ex.map(run,E))
 ok=sum(r[1] for r in res)
 for q,g,bad,m,t in res:
   print(('PASS' if g else 'FAIL'),q,'' if g else bad,'' if g else '| '+t[:220].replace('\n',' '))
-print('model',res[0][3],'accuracy %d/%d'%(ok,len(res)))
+from collections import Counter
+print('models',dict(Counter(r[3] for r in res)),'accuracy %d/%d'%(ok,len(res)))

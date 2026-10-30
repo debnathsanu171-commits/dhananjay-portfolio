@@ -13,6 +13,8 @@ const T=[
 ['en','Edge-tek: EDGETEQ, Spazio 3D, Optimus OptiSaw 3.2.','Edge-tek, Edge-tek, Spaatsio three D, Optimus Opti Saw three point two.'],
 ['hi','मेरे पास 10+ साल का अनुभव है।','मेरे पास 10 से ज़्यादा साल का अनुभव है।'],
 ['hi','5-7 साल','5 से 7 साल'],
+['en','The edge bander and edgebander run edge banding.','The edge baander and edge baander run edge baanding.'],
+['en','Homag edge banders, MDF, HDF, PVC, ERP.','Homaag edge baanders, M D F, H D F, P V C, E R P.'],
 ];
 let f=0;for(const [l,i,e] of T){const o=normalize(i,l);const ok=o===e;if(!ok)f++;console.log(ok?'PASS':'FAIL',l,JSON.stringify(i),'->',JSON.stringify(o)+(ok?'':'  expected '+JSON.stringify(e)))}
 console.log(f?f+' failed':'all passed');process.exit(f?1:0)

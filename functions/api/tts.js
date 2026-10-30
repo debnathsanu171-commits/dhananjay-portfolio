@@ -27,7 +27,7 @@ export async function onRequestPost({request,env}){
   const lang=/[\u0980-\u09FF]/.test(text)?'bn-IN':/[\u0900-\u097F]/.test(text)?'hi-IN':'en-IN';
   if(env.SARVAM_VOICE_ID){
     try{
-      const f=new FormData();f.append('text',text);f.append('voice_id',env.SARVAM_VOICE_ID);f.append('language_code',lang);f.append('pace','1.12');
+      const f=new FormData();f.append('text',text);f.append('voice_id',env.SARVAM_VOICE_ID);f.append('language_code',lang);f.append('pace','1.2');
       const r=await fetch('https://api.sarvam.ai/voices/clone',{method:'POST',headers:{'api-subscription-key':env.SARVAM_API_KEY},body:f});
       if(r.ok){const d=await r.json();if(d.audio_b64){const res=wav(b64(d.audio_b64));res.headers.set('x-voice','clone');return res;}}
     }catch(e){}

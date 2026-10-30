@@ -96,8 +96,9 @@ function compT(tx,ty,sc){var r=comp.getBoundingClientRect(),cs=getComputedStyle(
 function base(){var w0=comp.offsetWidth,h0=comp.offsetHeight;return{x:innerWidth-(MOB()?2:10)-w0,y:innerHeight-(MOB()?4:8)-h0,w:w0,h:h0}}
 function toCenter(){if(RM||isO())return;clearTimeout(MV.tm);var b=base(),sc=MOB()?1.45:1.9;comp.classList.add('big');comp.classList.remove('fly');
   var tx=innerWidth/2-(b.x+b.w/2),ty=(innerHeight/2+b.h*sc/2)-(b.y+b.h);compT(tx,ty,sc);MV.st='center'}
-function toCorner(){clearTimeout(MV.tm);comp.classList.remove('big','fly');comp.style.transform='';bub.style.transform='';MV.st='corner';if(AV&&AV.setDPR)AV.setDPR(devicePixelRatio||1);if(AV)AV.setMode(A.talking?'talk':'idle')}
-function tourEnd(){if(MV.busyTour||isO())return;if(MV.st==='center'){clearTimeout(MV.tm);MV.tm=setTimeout(function(){if(!A.talking&&!A.loading&&!busy&&!rec&&!MV.busyTour)toCorner();else if(MV.st==='center'&&!MV.busyTour)tourEnd()},1400)}}
+function toCorner(){clearTimeout(MV.tm);clearInterval(MV.pi);comp.classList.remove('big','fly');comp.style.transform='';bub.style.transform='';MV.st='corner';if(AV&&AV.setDPR)AV.setDPR(devicePixelRatio||1);if(AV)AV.setMode(A.talking?'talk':'idle')}
+function ptLoop(e){clearInterval(MV.pi);MV.pi=setInterval(function(){if(MV.st!=='section'||!A.talking){clearInterval(MV.pi);return}if(AV)AV.act('pointSide',1.6);e.classList.remove('ddhl');void e.offsetWidth;e.classList.add('ddhl')},6500)}
+function tourEnd(){if(MV.busyTour||isO())return;if(MV.st==='center'||MV.st==='section'){clearTimeout(MV.tm);MV.tm=setTimeout(function(){if(!A.talking&&!A.loading&&!busy&&!rec&&!MV.busyTour)toCorner();else if(MV.st==='center'&&!MV.busyTour)tourEnd()},1400)}}
 function flyTo(e,done){if(RM||isO()){done&&done();return}clearTimeout(MV.tm);MV.busyTour=true;var b=base(),sc=MOB()?.9:1.05;comp.classList.add('fly');comp.classList.remove('big');
   if(AV)AV.setMode('walk');
   setTimeout(function(){var r=e.getBoundingClientRect(),top=Math.max(70,Math.min(r.top+40,innerHeight-b.h*sc-20)),right=Math.min(innerWidth-8,r.right+b.w*sc*.9);
@@ -105,7 +106,7 @@ function flyTo(e,done){if(RM||isO()){done&&done();return}clearTimeout(MV.tm);MV.
     compT(x-b.x,(top+b.h*sc)-(b.y+b.h),sc);MV.st='section'},250);
   MV.tm=setTimeout(function(){comp.classList.remove('fly');if(AV){AV.setMode(A.talking?'talk':'idle');AV.act('pointSide',1.8)}
     MV.tm=setTimeout(function(){var f=['dance','hop','thumbs'][Math.random()*3|0];if(AV)AV.act(MOB()&&f==='dance'?'thumbs':f,1.8);
-      MV.tm=setTimeout(function(){MV.busyTour=false;if(A.talking&&!MOB())toCenter();else toCorner();done&&done()},2000)},1900)},1500)}
+      MV.tm=setTimeout(function(){MV.busyTour=false;if(A.talking||A.loading){MV.st='section';ptLoop(e)}else toCorner();done&&done()},2000)},1900)},1500)}
 addEventListener('resize',function(){if(MV.st!=='corner'&&!MV.busyTour)toCorner()});
 // ---------- UI ----------
 function isO(){return w.classList.contains('o')}

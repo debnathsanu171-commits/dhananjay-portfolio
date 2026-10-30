@@ -67,7 +67,7 @@ export function create(opts){
   const SD={};function sd(k,f,z,r){return SD[k]||(SD[k]=SOD(f,z,r,0))}
   const MS={vx:0,ax:0,sp:0};let phase=0,yawSign=1,pointFn=null,lookY=0,_T=new Vector3(),_S=new Vector3(),_E=new Vector3(),_H=new Vector3(),_d=new Vector3(),_n=new Vector3(),_tq=new Quaternion(),_wq=new Quaternion(),_pq=new Quaternion(),_ray=new Raycaster();
   function aim(o,from,to,dir,w){_d.copy(to).sub(from).normalize();_tq.setFromUnitVectors(_d,dir);o.getWorldQuaternion(_wq);o.parent.getWorldQuaternion(_pq);_wq.premultiply(_tq);_pq.invert().multiply(_wq);o.quaternion.slerp(_pq,w);o.updateMatrixWorld(true)}
-  function ik(dt){const w=sd('ptw',1.6,1,0).up(pointFn&&mode!=='walk'&&MS.sp<.05&&(actT<=0||actN==='pointSide')?1:0,dt);if(w<.01||!pointFn||!host)return;
+  function ik(dt){const w=sd('ptw',1.1,1,0).up(pointFn&&mode!=='walk'&&MS.sp<.05&&(actT<=0||actN==='pointSide')?1:0,dt);if(w<.01||!pointFn||!host)return;
     const p=pointFn();if(!p)return;const rc=r.domElement.getBoundingClientRect();if(!rc.width)return;
     root.updateMatrixWorld(true);_ray.setFromCamera({x:(p.x-rc.left)/rc.width*2-1,y:-(p.y-rc.top)/rc.height*2+1},cam);
     const i=0;const side=B.side;let k=0;{const a=B[side[0]+'Arm'].o.getWorldPosition(_S),o=_ray.ray.origin,d=_ray.ray.direction;const t=(a.z-o.z)/d.z;_T.copy(d).multiplyScalar(t).add(o);k=_T.x>=0?0:1}
@@ -99,14 +99,14 @@ export function create(opts){
     }
     shiftT-=dt;if(shiftT<=0){shift=(Math.random()<.5?-1:1)*(mode==='talk'?1:.7);shiftT=2+Math.random()*3}
     tgt.hipX=shift*.025;tgt.hipZ=shift*.035;tgt.kn=[shift<0?.14*Math.abs(shift):0,shift>0?.14*Math.abs(shift):0];
-    for(const key in cur){if(Array.isArray(cur[key]))for(let i=0;i<2;i++){const S=SD['p'+key+i]||(SD['p'+key+i]=SOD(1.5,.78,.6,cur[key][i]));cur[key][i]=S.up(tgt[key][i],dt)}else{const S=SD['p'+key]||(SD['p'+key]=SOD(1.5,.78,.6,cur[key]));cur[key]=S.up(tgt[key],dt)}}
+    for(const key in cur){if(Array.isArray(cur[key]))for(let i=0;i<2;i++){const S=SD['p'+key+i]||(SD['p'+key+i]=SOD(1.25,.9,.25,cur[key][i]));cur[key][i]=S.up(tgt[key][i],dt)}else{const S=SD['p'+key]||(SD['p'+key]=SOD(1.25,.9,.25,cur[key]));cur[key]=S.up(tgt[key],dt)}}
     if(dt===0)for(const key in cur)cur[key]=Array.isArray(tgt[key])?tgt[key].slice():tgt[key];
-    walkA=clamp(sd('wa',2.2,1,0).up(sstep(.02,.22,MS.sp)*(mode==='walk'?1:.6),dt),0,1);
+    walkA=clamp(sd('wa',1.8,1,0).up(sstep(.02,.22,MS.sp)*(mode==='walk'?1:.6),dt),0,1);
     phase+=(MS.sp/.75)*2*Math.PI*dt; // full gait cycle per 0.75 body-heights travelled: feet planted, no sliding
     if(Math.abs(MS.vx)>.03)yawSign=MS.vx>0?1:-1;
-    const yaw=sd('yaw',1.3,.9,0).up(walkA*yawSign*.85,dt),yawLag=sd('yawl',.8,.7,0).up(yaw,dt);
-    const lean=sd('lean',1.8,.6,0).up(clamp(Math.abs(MS.ax)*.05,0,.22)*Math.sign(MS.ax*yawSign)+walkA*.07,dt);
-    const armLag=sd('arml',1.4,.45,0).up(clamp(MS.ax*.12,-.4,.4),dt);root.rotation.y=yaw;
+    const yaw=sd('yaw',1.0,1,0).up(walkA*yawSign*.85,dt),yawLag=sd('yawl',.8,.85,0).up(yaw,dt);
+    const lean=sd('lean',1.4,.85,0).up(clamp(Math.abs(MS.ax)*.05,0,.22)*Math.sign(MS.ax*yawSign)+walkA*.07,dt);
+    const armLag=sd('arml',1.2,.7,0).up(clamp(MS.ax*.12,-.4,.4),dt);root.rotation.y=yaw;
     const L=(mode==='talk'||A_talk)?Math.min(1,level()):0;mouthV=lerp(mouthV,L,1-Math.exp(-dt*25));
     if(!B)return;
     const br=Math.sin(t*1.6)+.3*noise1(t*.6),talkAmp=(mode==='talk'?1:0)*(RMQ?.4:1);if(RMQ)hop=0;

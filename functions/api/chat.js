@@ -8,7 +8,7 @@ HOW TO ANSWER:
 - Length: about 4 to 8 sentences for questions about my work, experience, machines, software, skills, management, salary or joining. Use 1 to 2 sentences only for greetings or very simple questions.
 - Sound natural, warm and confident, like a young professional speaking. Use short sentences, under 20 words each. Use commas and full stops, not lists, bullets, markdown, brackets or dashes.
 - Never hedge with words like maybe, I think, perhaps, kind of, basically, actually, probably.
-- Optionally finish with one short line inviting them to look at the related part of my page, for example "You can see this on my page too." This is only an add-on after a full answer, never the answer itself. Skip it for greetings and off-topic questions.
+- End with one short, natural follow-up question for the recruiter (for example about the role, team size or machines they use). Skip it for greetings and off-topic questions.
 - Do not mention the CV, resume or Download CV button unless the visitor asks for a CV or resume. Give WhatsApp +91 77976 91585 and email debnathofficial07@gmail.com only when they ask how to contact or hire me.
 
 LANGUAGE: Reply in the visitor's style: English, casual Hinglish, or casual Banglish. Hinglish and Banglish must be in Roman letters only, in the relaxed way a young Indian professional talks, mixing English words naturally (machine, production, CNC, team, planning, experience). Never use pure formal Hindi or Bengali. Write names in normal case and the email exactly as debnathofficial07@gmail.com.
@@ -23,7 +23,12 @@ HONESTY: Only if a visitor directly asks whether this is a bot, an AI, or the re
 NO INVENTION: Use only facts from the knowledge base and extra facts below. Never invent numbers, team sizes, clients, salaries, projects or certificates. Never name clients or customers. My notice period and joining date are not known; never claim I can join immediately or give a date, say joining can be discussed on WhatsApp. If a detail is missing, say I do not have that detail here and suggest WhatsApp.
 SALARY: Only if asked about salary or CTC: my expectation is Rs 50,000 per month plus accommodation, open to discussion.
 
-SECTION TAG: After your reply, on a new last line, output exactly one tag naming the page section that best matches the question: [[sec:experience]] [[sec:machines]] [[sec:software]] [[sec:management]] [[sec:salary]] [[sec:credentials]] [[sec:gallery]] [[sec:contact]] [[sec:about]] or [[sec:none]]. Use salary for pay, joining, notice period or availability; about for who I am or where I am based; none for greetings or off-topic questions.
+VOICE AND STYLE: Talk like the real Dhananjay in an interview: confident, warm, humble, recruiter-friendly, first person. Match the visitor's language and register exactly (English, Roman Hinglish or Roman Banglish). Speak in clear points, each point one or two short sentences with real facts (company, city, years, machine model, software). Never sound robotic, never repeat the question, never say "as an AI" unless asked.
+
+POINT TAGS (very important, the website moves to the right part of the page while each point is spoken): split your answer into points. End EVERY point with exactly one tag [[t:ID]] naming the page part that point talks about. Allowed IDs only:
+about, experience, management, software, machines, credentials, gallery, contact, salary, none,
+m:rover (Biesse Rover Gold 1232 CNC), m:selco (Biesse Selco SK 3 beam saw), m:jade (Biesse Jade 340 edge bander), m:akron (Biesse Akron 1440 edge bander), m:j3200 (Jai J-3200.in panel saw), m:optisaw (Optimus OptiSaw 3.2), m:j4550 (Jai J-4550.in edge bander), m:optiedge (Optimus OptiEdge), m:mb38 (38-spindle multi boring, Jai/KDT), m:optimus-mb (Optimus multi-boring machine), m:hi700 (Hunny Impex Hi-700 PUR edge bander), m:hi202 (Hi-202 two-head multi boring), m:hi320 (Hi-320 panel saw), m:edgeteq (Homag EDGETEQ edge bander), m:hotpress (Shrichakra hot press), m:altendorf (Altendorf F 45 panel saw), m:spindle (spindle moulder grooving).
+Use the specific m: ID when a point is mainly about one machine, machines for machines in general, experience for career/companies/years, software for software tools, management for planning/team/QC/workflow, credentials for training and education, salary for pay/joining/notice, contact for WhatsApp/email/hiring, about for who I am and where I am based, gallery for photos/videos of work, none for greetings, follow-up questions and off-topic. The tag goes right after the point's last full stop. Never put tags anywhere else.
 
 KNOWLEDGE BASE:
 ${KB}
@@ -45,18 +50,27 @@ export async function onRequestPost({request,env}){
   const users=msgs.filter(m=>m&&m.role==='user').length;
   if(!users)return json({error:'empty'},400);
   if(users>12)return json({reply:"We've reached the chat limit for this session. Please download my CV or message me on WhatsApp at +91 77976 91585."});
-  const clean=msgs.slice(-20).filter(m=>m&&(m.role==='user'||m.role==='assistant')&&typeof m.content==='string').map(m=>({role:m.role,content:m.content.slice(0,500)}));
+  const clean=msgs.slice(-16).filter(m=>m&&(m.role==='user'||m.role==='assistant')&&typeof m.content==='string').map(m=>({role:m.role,content:m.content.slice(0,500)}));
   const last=clean[clean.length-1]?.content||'';
   const hl=b.lang==='hi'||b.lang==='bn'?b.lang:null;
   const banglish=/\b(ami|tumi|apni|kemon|koto|ache|achhe|ki kore|bolo|bolun|kothay|kaj|chakri|naki|keno)\b/i.test(last);
   const hinglish=/\b(kya|hai|hain|kitna|kab|kaise|karte|nahi|aur|unka|mein|kar|batao|bataiye)\b/i.test(last);
   const lh=/[\u0980-\u09FF]/.test(last)||banglish||hl==='bn'?'casual Banglish (Bengali written in Roman letters, mixed naturally with English words)':/[\u0900-\u097F]/.test(last)||hinglish||hl==='hi'?'casual Hinglish (Hindi written in Roman letters, mixed naturally with English words)':'English';
   while(clean.length&&clean[0].role!=='user')clean.shift();
-  const sysMsg={role:'system',content:SYS+`\nIMPORTANT: Write this reply entirely in ${lh}. Give a full, specific answer.`};
+  const sysMsg={role:'system',content:SYS+`\nIMPORTANT: Write this reply entirely in ${lh}. Give a full, specific answer, and tag every point.`};
+  const FEW=[{role:'user',content:'Tell me about your experience and the machines you use.'},{role:'assistant',content:'I have ten years in modular furniture manufacturing, starting in 2016 as a cutting operator in Kolkata and growing into a Production Manager. [[t:experience]] Since March 2024 I run end-to-end production at Timber Tech (Wood Aura) in Raipur, from planning and BOMs to quality checks and dispatch. [[t:management]] On the machine side, I operate and maintain the Biesse Rover Gold 1232 CNC for boring and routing, trained by a Biesse engineer. [[t:m:rover]] I also run edge banders like the Hunny Impex Hi-700 PUR for moisture-resistant kitchen edges. [[t:m:hi700]] What kind of setup does your factory have? [[t:none]]'},
+    {role:'user',content:'salary kitna expect karte ho aur contact kaise karein?'},{role:'assistant',content:'Meri expectation Rs 50,000 per month plus accommodation hai, aur yeh discussion ke liye open hai. [[t:salary]] Aap mujhe WhatsApp pe +91 77976 91585 ya email debnathofficial07@gmail.com pe contact kar sakte ho. [[t:contact]] Aapke yahan role kis location pe hai? [[t:none]]'}];
   let d=null;
   if(env.XAI_API_KEY&&env.USE_GROK==='1'){try{const g=await fetch('https://api.x.ai/v1/chat/completions',{method:'POST',headers:{authorization:'Bearer '+env.XAI_API_KEY,'content-type':'application/json'},body:JSON.stringify({model:env.XAI_MODEL||'grok-4.7',messages:[sysMsg,...clean],max_tokens:1200,temperature:0.5})});if(g.ok)d=await g.json();}catch(e){}}
-  if(!d&&env.AI){for(const m of [env.CF_MODEL||'@cf/meta/llama-3.3-70b-instruct-fp8-fast','@cf/meta/llama-3.1-8b-instruct-fast']){try{const r=await env.AI.run(m,{messages:[sysMsg,...clean],max_tokens:700,temperature:0.4});const c=typeof r?.response==='string'?r.response:r?.choices?.[0]?.message?.content;if(c){d={choices:[{message:{content:c}}]};break}}catch(e){}}}
+  if(!d&&env.AI){for(const m of [env.CF_MODEL||'@cf/meta/llama-3.3-70b-instruct-fp8-fast','@cf/meta/llama-3.1-8b-instruct-fast']){try{const r=await env.AI.run(m,{messages:[sysMsg,...FEW,...clean],max_tokens:800,temperature:0.4});const c=typeof r?.response==='string'?r.response:r?.choices?.[0]?.message?.content;if(c){d={choices:[{message:{content:c}}]};break}}catch(e){}}}
   if(!d)return json({error:'upstream'},502);
-  let t=(d.choices?.[0]?.message?.content||'').replace(/<think>[\s\S]*?<\/think>/g,'');let sec=null;t=t.replace(/\[\[\s*sec\s*:\s*([a-z]+)\s*\]\]/gi,(m,x)=>{sec=x.toLowerCase();return ''}).replace(/\[\[[^\]]*\]\]/g,'').replace(/[*#_`]/g,'').trim();
-  return json({reply:t||"Sorry, I couldn't answer that. Please message me on WhatsApp at +91 77976 91585.",sec:['experience','machines','software','management','salary','credentials','gallery','contact','about'].includes(sec)?sec:'none'});
+  let raw=(d.choices?.[0]?.message?.content||'').replace(/<think>[\s\S]*?<\/think>/g,'');
+  const OKT=new Set('about experience management software machines credentials gallery contact salary none m:rover m:selco m:jade m:akron m:j3200 m:optisaw m:j4550 m:optiedge m:mb38 m:optimus-mb m:hi700 m:hi202 m:hi320 m:edgeteq m:hotpress m:altendorf m:spindle'.split(' '));
+  raw=raw.replace(/\[\[\s*sec\s*:[^\]]*\]\]/gi,'');
+  const points=[];let re=/\[\[\s*t\s*:\s*([a-z0-9:-]+)\s*\]\]/gi,m,li=0;
+  while((m=re.exec(raw))){const tx=raw.slice(li,m.index).replace(/\[\[[^\]]*\]\]/g,'').replace(/[*#_`]/g,'').trim();const id=m[1].toLowerCase();if(tx)points.push({text:tx,target:OKT.has(id)?id:null});li=re.lastIndex}
+  const rest=raw.slice(li).replace(/\[\[[^\]]*\]\]/g,'').replace(/[*#_`]/g,'').trim();if(rest)points.push({text:rest,target:null});
+  const t=points.map(p=>p.text).join(' ').trim();
+  const f=points.find(p=>p.target&&p.target!=='none');let sec=f?(f.target.startsWith('m:')?'machines':f.target):'none';if(sec==='salary')sec='salary';
+  return json({reply:t||"Sorry, I couldn't answer that. Please message me on WhatsApp at +91 77976 91585.",sec:['experience','machines','software','management','salary','credentials','gallery','contact','about'].includes(sec)?sec:'none',points});
 }

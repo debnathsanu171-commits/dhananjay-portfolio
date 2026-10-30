@@ -1,7 +1,7 @@
 (function(){
 if(window.__ddb)return;window.__ddb=1;
 var C='#455CE9',D='#1C1D20',W='917797691585',EM='debnathofficial07@gmail.com',CV='resume.pdf';
-var SRC=(document.currentScript&&document.currentScript.src)||location.origin+'/assets/bot.js',BASE=SRC.replace(/[^\/]*$/,''),POSTER=BASE+'img/avatar3d-poster.png?v=2';
+var SRC=(document.currentScript&&document.currentScript.src)||location.origin+'/assets/bot.js',BASE=SRC.replace(/[^\/]*$/,''),POSTER=BASE+'img/avatar3d-poster.png?v=3';
 var RM=matchMedia('(prefers-reduced-motion: reduce)').matches,MOB=function(){return innerWidth<600};
 var css='#ddb{font:14px/1.45 Inter,system-ui,-apple-system,Segoe UI,sans-serif;color:'+D+'}'
 +'#ddb button{font:inherit}#ddb em{font-style:normal}#ddb :focus-visible{outline:2px solid '+C+';outline-offset:2px}'
@@ -72,7 +72,7 @@ function host(){return isO()?q('.ddhc'):q('.ddhs')}
 function avMode(m){avState=m;if(AV)AV.setMode(m)}
 function avAttach(){if(!AV)return;var h=host();AV.attach(h);requestAnimationFrame(function(){h.classList.add('live');(h===q('.ddhc')?q('.ddhs'):q('.ddhc')).classList.remove('live')})}
 function loadAV(){if(RM||AV)return;try{var c=document.createElement('canvas');if(!(c.getContext('webgl2')||c.getContext('webgl')))return}catch(e){return}
-var fi=new Image();fi.src=BASE+'img/dd-cut-480.webp';Promise.all([import(BASE+'avatar3d.js?v=2'),fi.decode().then(function(){return fi},function(){return null})]).then(function(r){var m=r[0];AV=m.create({level:level,faceImg:r[1]});avAttach();AV.setMode(avState);AV.start();window.__ddbAV=AV}).catch(function(){})}
+import(BASE+'avatar3d.js?v=3').then(function(m){AV=m.create({level:level});avAttach();AV.setMode(avState);AV.start();window.__ddbAV=AV}).catch(function(){})}
 function idle(f){(window.requestIdleCallback||function(cb){setTimeout(cb,300)})(f,{timeout:2500})}
 if(document.readyState==='complete')idle(loadAV);else addEventListener('load',function(){idle(loadAV)});
 // ---------- single audio controller ----------

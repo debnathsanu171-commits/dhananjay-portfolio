@@ -59,15 +59,15 @@ function build(face){
   // hair: top cap, back, swept-up quiff
   if(!face)mk(new SphereGeometry(.124,18,10,0,Math.PI*2,0,Math.PI*.42),HAIR,head,face?[0,.15,-.02]:[0,.135,-.005],face?[-.45,0,0]:[-.15,0,0],face?[.99,1.12,1.0]:[.98,1.15,1.05]);
   mk(new SphereGeometry(.123,16,10,Math.PI,Math.PI,0,Math.PI*.62),HAIR,head,[0,.125,-.006],[0,0,0],[.98,1.12,1.04]);
-  if(!face)mk(new SphereGeometry(.09,12,8),HAIR,head,[0,.235,.035],[-.5,0,0],[1.05,.5,.9]);
-  if(!face)mk(new SphereGeometry(.06,10,6),HAIR,head,[.01,.255,.06],[-.8,0,.15],[1.1,.45,.8]);
+  if(!face)mk(new SphereGeometry(.095,14,10),HAIR,head,[0,.225,.045],[-.55,0,0],[1.1,.5,1.0]);
+  if(!face)mk(new SphereGeometry(.065,12,8),HAIR,head,[.01,.25,.085],[-.9,0,.1],[1.2,.42,.8]);
   if(!face){
   // side hair
   mk(new BoxGeometry(.02,.07,.07),HAIR,head,[-.11,.17,-.01]);mk(new BoxGeometry(.02,.07,.07),HAIR,head,[.11,.17,-.01]);
   // beard (lower front cap) + moustache
-  mk(new SphereGeometry(.121,16,10,-.2,Math.PI+.4,Math.PI*.6,Math.PI*.4),HAIR,head,[0,.12,.001],[0,0,0],[.97,1.13,1.035]).material=M(0x2B221D);
+  mk(new SphereGeometry(.1205,16,10,-.15,Math.PI+.3,Math.PI*.68,Math.PI*.32),HAIR,head,[0,.12,.001],[0,0,0],[.962,1.13,1.028]).material=M(0x4A3529);
   const mo=J.mous=G(head,[0,.07,.112]);
-  mk(cap(.012,.05),HAIR,mo,[-.024,0,0],[0,0,Math.PI/2+.35]);mk(cap(.012,.05),HAIR,mo,[.024,0,0],[0,0,Math.PI/2-.35]);
+  mk(cap(.0095,.05),HAIR,mo,[-.024,0,0],[0,0,Math.PI/2+.35]);mk(cap(.0095,.05),HAIR,mo,[.024,0,0],[0,0,Math.PI/2-.35]);
   // mouth
   const mouth=J.mouth=G(head,[0,.048,.113]);
   J.mIn=mk(new SphereGeometry(.026,10,6),MOUTH,mouth,[0,0,0],[0,0,0],[1,.15,.4]);
@@ -81,7 +81,7 @@ function build(face){
     mk(new SphereGeometry(.019,10,8),WHITE,e,[0,0,0],[0,0,0],[1.2,.8,.6]);
     J.pups.push(mk(new SphereGeometry(.0115,8,6),PUP,e,[0,0,.009]));
     const lid=mk(new SphereGeometry(.0235,10,8),SKIN,e,[0,.016,.002],[0,0,0],[1.15,.08,.75]);J.lids.push(lid);
-    J.brows.push(mk(new BoxGeometry(.045,.012,.014),HAIR,head,[s*.045,.172,.112],[0,0,s*-.12]));
+    J.brows.push(mk(new BoxGeometry(.05,.015,.016),HAIR,head,[s*.045,.172,.112],[0,0,s*-.12]));
   }
   }
   // arms

@@ -29,3 +29,5 @@ if(RM)return;setTimeout(function loop(){set(W[i],'out');setTimeout(function(){i=
 [].forEach.call(document.querySelectorAll('.vals,.mg,.cl,.tl,.two>div,.sgs'),function(g){var n=0;[].forEach.call(g.children,function(c){if(c.hasAttribute('data-rv'))c.style.transitionDelay=(n++%4)*90+'ms'})});
 document.getElementById('yr').textContent=new Date().getFullYear();
 })();
+
+(function(){var b=document.querySelector('.bgt'),h=document.getElementById('hp');if(!b||!h)return;function f(){if(innerWidth>900){b.style.removeProperty('--bt');return}b.style.setProperty('--bt',Math.round(h.offsetTop+h.offsetHeight*.45-b.offsetHeight/2)+'px')}f();addEventListener('resize',f,{passive:true});addEventListener('load',f)})();

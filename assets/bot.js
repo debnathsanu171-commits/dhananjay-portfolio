@@ -54,6 +54,7 @@ var K=[['experience',/experi|career|journey|\bjobs?\b|compan|years?|saal|bochor|
 ['management',/manag|team|ppc|planning|bom|cut ?list|quality|\bqc\b|dispatch|install|leader|skill|strength|kya kya kar|ki ki paren|handle|supervis|प्रबंधन|मैनेजमेंट|टीम|ম্যানেজ|টিম/i,'.sgw'],
 ['salary',/salary|ctc|pay\b|package|expect|kitna (lenge|loge|chahiye)|koto (taka|nite)|beton|taka|paisa|availab|notice|join|kab se|kobe theke|start|relocat|shift|वेतन|सैलरी|उपलब्ध|বেতন|প্রাপ্য/i,'#contact'],
 ['credentials',/certif|credential|training|trained|course|qualif|educat|padhai|porashona|study|10th|madhyamik|प्रमाण|ट्रेनिंग|সার্টিফিকেট|প্রশিক্ষণ/i,'#credentials'],
+['projects',/\bbuilt\b|\bbuild\b|develop|web ?app|\bapps?\b|jinny|jd ?ops|software banay|\bprojects?\b|banaya|baniyech|বানিয়েছ|ডেভেলপ/i,'#projects'],
 ['gallery',/galler|photo|picture|video|project|portfolio work|kaam dikhao|kaj dekhan|samples?|तस्वीर|फोटो|ছবি|ভিডিও/i,'#gallery'],
 ['contact',/contact|whats ?app|e-?mail|phone|call|number|reach|hire|interview|\bcv\b|resume|sampark|jogajog|संपर्क|नंबर|যোগাযোগ|নম্বর/i,'#contact'],
 ['about',/about|who (is|are)|kaun|ke tumi|apni ke|introduc|profile|yourself|location|where|kahan|kothay|based|from|ghar|bari|kolkata|परिचय|कौन|পরিচয়|কে /i,'#about']];

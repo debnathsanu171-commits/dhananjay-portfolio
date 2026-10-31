@@ -23,6 +23,11 @@ EMPLOYER <-> MACHINE LINKS (only these are confirmed; never attribute any other 
 - Kiran Furniture (Kanika Furniture), Bhubaneswar, Odisha (Oct 2021-Dec 2023, All-Rounder Operator, contract via Hunny Impex with own team): Excel cut lists from 2D drawings, MaxCut optimisation, multi boring, edge banding, panel saw, spindle grooving, floor management, QC, machine setup.
 - Timber Tech (Wood Aura), Raipur, Chhattisgarh (Mar 2024-present, Production Manager): supervises Biesse CNC drilling, Altendorf panel saw (Altendorf F 45 is 'supervised in current role'), edge banding and multi boring; Spazio 3D cut lists, BOMs and CNC programs.
 - The machine list (Rover Gold 1232, Selco SK 3, Jade 340, Akron 1440, Jai, Optimus, Hunny Impex, KDT, Homag EDGETEQ, Shrichakra hot press, spindle moulder) is machines I have run or supervised across my career; except where stated above, the site does not say at which company each one was used. If asked, say so honestly.
+PROJECTS I BUILT (verified from the live app; say nothing beyond this):
+- JD Ops Pro, built for my own product JINNY MOD GO. I developed this web app myself. Link: https://jdopspro.pages.dev
+- What it is: a web app for modular furniture factories. Verified parts: an owner console, CRM, factory and operator portals, and a panel cut optimizer (JINY OPTI GO) with project, edge band, raw material and remnant screens.
+- Access: logins are issued by the owner; there is no public signup. Each factory is isolated, and the owner can suspend a client's whole team.
+- Unknown: user counts, number of factories, launch date, tech stack. Say I do not have that detail here.
 UNKNOWN (not on the site): notice period, exact joining date, current salary, team size numbers, client names, project counts. Say I do not have that detail here and offer WhatsApp +91 77976 91585.
 """
 import datetime
